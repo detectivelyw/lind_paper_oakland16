@@ -1,0 +1,940 @@
+@misc{NVD,
+title={National Vulnerability Database},
+note = {https://nvd.nist.gov/},
+key={NVD}
+}
+
+@misc{LTP,
+title={Linux Test Project},
+note = {https://linux-test-project.github.io/},
+key={LTP}
+}
+
+@misc{Trinity,
+title={Trinity, a Linux System call fuzz tester},
+note = {http://codemonkey.org.uk/projects/trinity/},
+key={Trinity}
+}
+
+@inproceedings{Repy-10, 
+    author={Cappos, J. and Dadgar, A. and Rasley, J. and Samuel, J. and Beschastnikh, 
+    I. and Barsan, C. and Krishnamurthy, A. and Anderson, T.}, 
+    title={Retaining sandbox containment despite bugs in privileged memory-safe code}, 
+    booktitle={Proceedings of the CCS'10}, 
+    year={2010}, 
+} 
+
+@inproceedings{NaCl-09, 
+    author={Yee, B. and Sehr, D. and Dardyk, G. and Chen, J. B. and Muth, 
+    R. and Ormandy, T. and Okasaka, S. and Narula, N. and Fullagar, N.}, 
+    title={Native Client: A Sandbox for Portable, Untrusted x86 Native Code}, 
+    booktitle={Proceedings of the IEEE Symposium on Security and Privacy}, 
+    year={2009}, 
+    pages = {79-93},
+    address = {Berkeley, CA, USA},
+} 
+    
+@inproceedings{Drawbridge-11, 
+    author={Porter, D. E. and Boyd-Wickizer, S. and Howell, J. and Olinsky, R. and Hunt, G. C}, 
+    title={Rethinking the Library OS from the Top Down}, 
+    booktitle={Proceedings of the ASPLOS'11}, 
+    year={2011}, 
+    pages = {291-304},
+    address = {Newport Beach, California, USA},
+} 
+
+@inproceedings{Graphene-14, 
+    author={Tsai, C. C. and Arora, K. S. and Bandi, N. and Jain, B. and Jannen, W. and John, 
+    J. and Kalodner, H. A. and Kulkarni, V. and Oliveira, D. and Porter, D. E.}, 
+    title={Cooperation and Security Isolation of Library OSes for Multi-Process Applications}, 
+    booktitle={Proceedings of the EuroSys'14}, 
+    year={2014}, 
+    address = {Amsterdam, Netherlands},
+} 
+
+
+@misc{gcov,
+title={gcov(1) - Linux man page},
+note = {http://linux.die.net/man/1/gcov},
+key={gcov}
+}
+
+
+@inproceedings{Xen-03, 
+    author={Barham, P. and Dragovich, B. and Fraser, K. and Hand, S. and Harris, 
+    T. and Ho, A. and Neugebauer, R. and Pratt, I. and Warfield, A.}, 
+    title={Xen and the Art of Virtualization}, 
+    booktitle={Proceedings of the SOSP'03}, 
+    year={2003}, 
+    pages = {164-177},
+} 
+
+@inproceedings{SCI-04, 
+    author={Garfinkel, T. and Pfaff, B. and Rosenblum, M.}, 
+    title={Ostia: A delegating architecture for secure system call interposition}, 
+    booktitle={Proceedings of the NDSS'04}, 
+    year={2004}, 
+} 
+
+@inproceedings{Janus0:96, 
+    author={Goldberg, I. and Wagner, D. and Thomas, R. and Brewer, E.}, 
+    title={A secure environment for untrusted helper applications (confining the wily hacker)}, 
+    booktitle={Proceedings of the USENIX UNIX Security Symposium'96}, 
+    year={1996}, 
+} 
+
+@inproceedings{Janus:99, 
+    author={Wagner, D. A.}, 
+    title={Janus: An approach for confinement of untrusted applications}, 
+    booktitle={Tech. Rep. CSD-99-1056, University of California, Berkeley}, 
+    year={1999}, 
+} 
+
+@inproceedings{SFI:93, 
+    author={Wahbe, R. and Lucco, S. and Anderson, T. E. and Graham, S. L.}, 
+    title={Efficient software-based fault isolation}, 
+    booktitle={SIGOPS Oper. Syst. Rev. 27, 5}, 
+    year={1993}, 
+    pages = {203-216},
+} 
+
+@inproceedings{Nooks:03, 
+    author={Swift, M. M. and Bershad, B. N. and Levy, H. M.}, 
+    title={Improving the reliability of commodity operating systems}, 
+    booktitle={Proceedings of the SOSP'03}, 
+    year={2003}, 
+    pages = {207-222},
+} 
+
+@misc{CVE:14,
+    title={Kernel Vulnerability Statistics},
+    author={{CVE DETAILS}},
+    howpublished={http://www.cvedetails.com/product/47/Linux-Linux-Kernel.html?vendor_id=33},
+    year={2014},
+}
+
+@misc{NVD:14,
+    title={Kernel Vulnerabilities},
+    author={{NATIONAL VULNERABILITY DATABASE}},
+    howpublished={http://goo.gl/GJpw0b},
+    year={2014},
+}
+
+@inproceedings{Metrics-13, 
+    author={Anil Kurmus and Reinhard Tartler and Daniela Dorneanu and 
+    Bernhard Heinloth and Valentin Rothberg and Andreas Ruprecht and Wolfgang Schroder-Preikschat 
+    and Daniel Lohmann and Rudiger Kapitza}, 
+    title={Attack Surface Metrics and Automated Compile-Time OS Kernel Tailoring}, 
+    booktitle={Proceedings of the NDSS'13}, 
+    year={2013}, 
+    pages={}, 
+} 
+
+@inproceedings{Linux-13, 
+    author={Greg Kroah-Hartman and Jonathan Corbet and Amanda McPherson}, 
+    title={Linux Kernel Development Tech. Rep.}, 
+    booktitle={Linux Foundation}, 
+    year={2013}, 
+    pages={}, 
+} 
+
+#
+#  below are 40 sever Linux kernel bugs from last 5 years
+#  that we examined and used in this Lind paper
+#
+
+# number: 01
+# type: concurrency, race condition
+@misc{CVE:20149529,
+    title={{CVE-2014-9529}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 02
+# type: NULL pointer dereference
+@misc{CVE:20143631,
+    title={{CVE-2014-3631}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 03
+# type: network socket variable mischeck
+@misc{CVE:20126657,
+    title={{CVE-2012-6657}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 04
+# type: privilege escalation
+@misc{CVE:20145207,
+    title={{CVE-2014-5207}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 05
+# type: privilege escalation
+@misc{CVE:20145206,
+    title={{CVE-2014-5206}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 06
+# type: privilege escalation
+@misc{CVE:20143153,
+    title={{CVE-2014-3153}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 07
+# type: privilege escalation
+@misc{CVE:20142851,
+    title={{CVE-2014-2851}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 08
+# type: race condition, DoS
+@misc{CVE:20142706,
+    title={{CVE-2014-2706}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 09
+# type: race condition, DoS
+@misc{CVE:20140100,
+    title={{CVE-2014-0100}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 10
+# type: buffer overflow
+@misc{CVE:20140049,
+    title={{CVE-2014-0049}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 11
+# type: DoS 
+@misc{CVE:20126638,
+    title={{CVE-2012-6638}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 12
+# type: privilege escalation 
+@misc{CVE:20140038,
+    title={{CVE-2014-0038}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2014},
+    month={},
+}
+
+# number: 13
+# type: privilege escalation 
+@misc{CVE:20136368,
+    title={{CVE-2013-6368}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 14
+# type: index error, privilege escalation 
+@misc{CVE:20134587,
+    title={{CVE-2013-4587}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 15
+# type: size/boundary check, DoS 
+@misc{CVE:20134563,
+    title={{CVE-2013-4563}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 16
+# type: value validation 
+@misc{CVE:20134348,
+    title={{CVE-2013-4348}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 17
+# type: privilege escalation 
+@misc{CVE:20134300,
+    title={{CVE-2013-4300}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 18
+# type: privilege escalation 
+@misc{CVE:20131943,
+    title={{CVE-2013-1943}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 19
+# type: privilege escalation 
+@misc{CVE:20132094,
+    title={{CVE-2013-2094}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={February},
+}
+
+# number: 20
+# type: NULL pointer dereference, DoS
+@misc{CVE:20133301,
+    title={{CVE-2013-3301}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 21
+# type: privilege escalation
+@misc{CVE:20131858,
+    title={{CVE-2013-1858}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 22
+# type: use-after-free
+@misc{CVE:20131797,
+    title={{CVE-2013-1797}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 23
+# type: privilege escalation, index error
+@misc{CVE:20131763,
+    title={{CVE-2013-1763}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 24
+# type: NULL pointer dereference
+@misc{CVE:20130310,
+    title={{CVE-2013-0310}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={},
+}
+
+# number: 25
+# type: heap-based buffer overflow
+@misc{CVE:20122136,
+    title={{CVE-2012-2136}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 26
+# type: lack of sanity check
+@misc{CVE:20122100,
+    title={{CVE-2012-2100}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 27
+# type: privilege escalation
+@misc{CVE:20120028,
+    title={{CVE-2012-0028}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 28
+# type: privilege escalation, buffer overflow
+@misc{CVE:20112517,
+    title={{CVE-2011-2517}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2011},
+    month={},
+}
+
+# number: 29
+# type: privilege escalation
+@misc{CVE:20122123,
+    title={{CVE-2012-2123}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 30
+# type: NULL pointer dereference
+@misc{CVE:20121146,
+    title={{CVE-2012-1146}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 31
+# type: divide-by-zero error and panic
+@misc{CVE:20120207,
+    title={{CVE-2012-0207}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={},
+}
+
+# number: 32
+# type: NULL pointer dereference
+@misc{CVE:20112525,
+    title={{CVE-2011-2525}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2011},
+    month={},
+}
+
+# number: 33
+# type: NULL pointer dereference
+@misc{CVE:20111076,
+    title={{CVE-2011-1076}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2011},
+    month={},
+}
+
+# number: 34
+# type: NULL pointer dereference, none Initialization
+@misc{CVE:20112184,
+    title={{CVE-2011-2184}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2011},
+    month={},
+}
+
+# number: 35
+# type: integer overflow 
+@misc{CVE:20102478,
+    title={{CVE-2010-2478}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+# number: 36
+# type: NULL pointer dereference 
+@misc{CVE:20102960,
+    title={{CVE-2010-2960}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+# number: 37
+# type: privilege escalation, buffer overflow 
+@misc{CVE:20102492,
+    title={{CVE-2010-2492}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+# number: 38
+# type: stack overflow
+@misc{CVE:20102240,
+    title={{CVE-2010-2240}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+# number: 39
+# type: use-after-free
+@misc{CVE:20101188,
+    title={{CVE-2010-1188}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+# number: 40
+# type: NULL pointer dereference
+@misc{CVE:20100437,
+    title={{CVE-2010-0437}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={},
+}
+
+#
+#  below are 17 additional bugs from previous work
+#
+
+@misc{CVE:20093234,
+    title={{CVE-2009-3234}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2009},
+    month={September},
+}
+
+@misc{CVE:20131828,
+    title={{CVE-2013-1828}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={February},
+}
+
+@misc{CVE:20132892,
+    title={{CVE-2013-2892}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={August},
+}
+
+@misc{CVE:20050736,
+    title={{CVE-2005-0736}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2005},
+    month={March},
+}
+
+@misc{CVE:20092698,
+    title={{CVE-2009-2698}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2009},
+    month={August},
+}
+
+@misc{CVE:20093002,
+    title={{CVE-2009-3002}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2009},
+    month={August},
+}
+
+@misc{CVE:20104073,
+    title={{CVE-2010-4073}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={October},
+}
+
+@misc{CVE:20132852,
+    title={{CVE-2013-2852}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={April},
+}
+
+
+@misc{CVE:20134343,
+    title={{CVE-2013-4343}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={June},
+}
+
+@misc{CVE:20103437,
+    title={{CVE-2010-3437}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={September},
+}
+
+@misc{CVE:20102959,
+    title={{CVE-2010-2959}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={August},
+}
+
+@misc{CVE:20091527,
+    title={{CVE-2009-1527}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2009},
+    month={May},
+}
+
+@misc{CVE:20093547,
+    title={{CVE-2009-3547}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2009},
+    month={October},
+}
+
+@misc{CVE:20103904,
+    title={{CVE-2010-3904}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={October},
+}
+
+@misc{CVE:20104347,
+    title={{CVE-2010-4347}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2010},
+    month={November},
+}
+
+@misc{CVE:20120946,
+    title={{CVE-2012-0946}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2012},
+    month={February},
+}
+
+@misc{CVE:20130268,
+    title={{CVE-2013-0268}},
+    author={{COMMON VULNERABILITIES AND EXPOSURES}},
+    howpublished={},
+    year={2013},
+    month={December},
+}
+
+@misc{CVE-2014-3153,
+    title={{Privilege Escalation Vulnerability in Linux Kernel}},
+    author={{CVE-2014-3153}},
+    howpublished={\url{http://thehackernews.com/2014/06/linux-kernel-vulnerable-to-privilege\_7.html}},
+    year={2014},
+    month={},
+}
+
+@misc{CVE-2008-2100,
+    title={{VMware buffer overflows in the VIX API let local users execute arbitrary code in the host OS}},
+    author={{CVE-2008-2100}},
+    howpublished={\url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2100}},
+    year={2008},
+    month={},
+}
+
+@misc{CVE-2009-3234,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2009-3234}},
+    howpublished={\url{}},
+    year={2009},
+    month={},
+}
+
+@misc{CVE-2013-1828,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2013-1828}},
+    howpublished={\url{}},
+    year={2013},
+    month={},
+}
+
+@misc{CVE-2013-2892,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2013-2892}},
+    howpublished={\url{}},
+    year={2013},
+    month={},
+}
+
+@misc{CVE-2009-3002,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2009-3002}},
+    howpublished={\url{}},
+    year={2009},
+    month={},
+}
+
+@misc{CVE-2010-4073,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2010-4073}},
+    howpublished={\url{}},
+    year={2010},
+    month={},
+}
+
+@misc{CVE-2013-4343,
+    title={{COMMON VULNERABILITIES AND EXPOSURES}},
+    author={{CVE-2013-4343}},
+    howpublished={\url{}},
+    year={2013},
+    month={},
+}
+
+@misc{KVM-Attack,
+    title={{Virtualization Under Attack: Breaking Out of KVM}},
+    author={{ELHAGE, N.}},
+    howpublished={\url{http://www.blackhat.com/html/bh-us-11/bh-us-11-briefings.html}},
+    year={2011},
+    month={},
+}
+
+@misc{VMWare-Attack,
+    title={{Cloudburst: A VMWare Guest to Host Escape Story}},
+    author={{KORTCHINSKY, K.}},
+    howpublished={\url{http://www.blackhat.com/presentations/bh-usa-09/KORTCHINSKY/BHUSA09-Kortchinsky-Cloudburst-SLIDES.pdf}},
+    year={},
+    month={},
+}
+
+@inproceedings{lewis2013does,
+  title={Does bug prediction support human developers? findings from a google case study},
+  author={Lewis, Chris and Lin, Zhongpeng and Sadowski, Caitlin and Zhu, Xiaoyan and Ou, Rong and Whitehead, EJ},
+  booktitle={Software Engineering (ICSE), 2013 35th International Conference on},
+  pages={372--381},
+  year={2013},
+  organization={IEEE}
+}
+
+@inproceedings{Bug-Location,
+  title={Predicting the Location and Number of Faults in Large Software Systems},
+  author={Thomas J. Ostrand and Elaine J. Weyuker and Robert M. Bell},
+  booktitle={Transactions on Software Engineering},
+  pages={},
+  year={2005},
+  organization={IEEE}
+}
+
+@inproceedings{Mining-Metrics,
+  title={Mining Metrics to Predict Component Failures},
+  author={Nachiappan Nagappan and Thomas Ball and Andreas Zeller},
+  booktitle={Proceedings of the 28th international conference on Software engineering},
+  pages={},
+  year={2006},
+  organization={}
+}
+
+@inproceedings{LTP-Coverage,
+  title={Improving the Linux Test Project with Kernel Code Coverage Analysis},
+  author={Paul Larson},
+  booktitle={Proceedings of the 2003 Ottawa Linux Symposium},
+  pages={},
+  year={2003},
+  organization={}
+}
+
+@misc{RepyKernel,
+title={Seattle's Repy V2 Library},
+note = {https://seattle.poly.edu/wiki/RepyV2API},
+key={Repy}
+}
+
+@misc{CVE-Datasource,
+title={CVE Details Datasource},
+note = {http://www.cvedetails.com/vulnerability-list/vendor\_id-33/product\_id-47/version\_id-163187/Linux-Linux-Kernel-3.14.1.html},
+key={CVE-Data}
+}
+
+@misc{Exploit-Database,
+title={Exploit Database},
+note = {https://www.exploit-db.com},
+key={Exploit-Database}
+}
+
+@misc{Java,
+title={Java},
+note = {https://www.java.com},
+key={Java}
+}
+
+@misc{Lua,
+title={The programming language Lua},
+note = {www.lua.org},
+key={Lua}
+}
+
+@misc{Silverlight,
+title={Microsoft Silverlight},
+note = {http://www.microsoft.com/silverlight/},
+key={Silverlight}
+}
+
+@misc{JavaScript,
+title={JavaScript},
+note = {http://www.w3schools.com/js/},
+key={JavaScript}
+}
+
+@misc{CSharp,
+title={Microsoft C\#},
+note = {https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx},
+key={CSharp}
+}
+
+@inproceedings{Java-Lessons,
+  title={Comparing Java and .NET security: Lessons learned and missed},
+  author={N. Paul and D. Evans.},
+  booktitle={Computers and Security},
+  pages={338-350},
+  year={2006},
+  organization={}
+}
+
+@misc{JavaBugs,
+title={Learn about Java technology},
+note = {http://www.java.com/en/about/},
+key={JavaBugs}
+}
+
+@misc{VMWare-ESX-Server,
+title={VMWare ESX Server},
+note = {https://www.vmware.com/products/esxi-and-esx/overview},
+key={VMWare-ESX-Server}
+}
+
+@misc{LXC,
+title={Linux Container LXC},
+note = {https://linuxcontainers.org},
+key={LXC}
+}
+
+@misc{Jails,
+title={FreeBSD Jails},
+note = {https://wiki.freebsd.org/Jails},
+key={Jails}
+}
+
+@misc{Zones,
+title={Oracle Solaris Zones},
+note = {https://docs.oracle.com/cd/E18440\_01
+/doc.111/e18415/chapter\_zones.htm\#OPCUG426},
+key={Zones}
+}
+
+@misc{Microsoft-Hyper-V,
+title={Microsoft Hyper-V},
+note = {https://technet.microsoft.com/en-us/windowsserver/dd448604.aspx},
+key={Microsoft-Hyper-V}
+}
+
+@misc{VMWare-Workstation,
+title={VMWare Workstation},
+note = {https://www.vmware.com/products/workstation},
+key={VMWare-Workstation}
+}
+
+@misc{VMWare-Server,
+title={VMWare Server},
+note = {https://my.vmware.com/web/vmware/info?
+slug=infrastructure\_operations\_management/vmware\_server/2\_0},
+key={VMWare-Server}
+}
+
+@misc{Microsoft-Virtual-PC,
+title={Microsoft Virtual PC},
+note = {http://www.microsoft.com/en-us/download/details.aspx?id=3702},
+key={Microsoft-Virtual-PC}
+}
+
+@misc{VirtualBox,
+title={VirtualBox},
+note = {https://www.virtualbox.org},
+key={VirtualBox}
+}
+
+@inproceedings{Bascule, 
+    author={Andrew Baumann and Dongyoon Lee and Pedro Fonseca and Lisa Glendenning 
+    and Jacob R. Lorch and Barry Bond and Reuben Olinsky and Galen C. Hunt}, 
+    title={Composing OS Extensions Safely and Efficiently with Bascule}, 
+    booktitle={Proceedings of the Eurosys'13}, 
+    year={2013}, 
+}
+
+@inproceedings{Haven, 
+    author={Andrew Baumann and Marcus Peinado and Galen Hunt}, 
+    title={Shielding Applications from an Untrusted Cloud with Haven}, 
+    booktitle={Proceedings of the OSDI'14}, 
+    year={2014}, 
+}
+
+@misc{Problems-SCI,
+    title={{Traps and Pitfalls: Practical Problems in System Call Interposition Based Security Tools}},
+    author={{Tal Garfinkel}},
+}
