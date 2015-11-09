@@ -1,0 +1,24 @@
+\begin{abstract}
+
+Building secure systems that allow untrusted programs to run without triggering vulnerabilities 
+in the underlying privileged code of an operating system (OS) kernel or hypervisor is very challenging. 
+Despite substantial effort by security researchers and system developers to eliminate these flaws, 
+exploitable vulnerabilities can still be found. Techniques to protect against intentional or 
+unintentional triggering of these vulnerabilities, such as system call filtering, 
+operating system virtualization, and library OSes have had limited success, 
+but often harbor their own exploitable vulnerabilities. As a result, they can not fully prevent 
+buggy programs from triggering flaws, or attackers from leveraging these bugs for their own purposes.
+
+In this paper, we introduce a novel security design approach that leverages controlled kernel access 
+to protect privileged code from exploitation by untrusted programs. We start by analyzing the reasons 
+why existing techniques have been less than effective. We then present a new metric 
+to determine where kernel flaws are likely to be located, based on the hypothesis that 
+commonly-used kernel paths, executed by programs used on a daily basis, 
+contain fewer vulnerabilities than less-used paths. Next, we discuss how this insight 
+was used to devise a novel design pattern that reimplements essential OS functionality inside a sandbox. 
+This pattern has a very small trusted computing base (TCB) that only accesses commonly used kernel paths. 
+Lastly, we show how this design pattern was used to implement  a prototype security system called Lind. 
+Our experimental results show that programs run inside Lind triggered about 10x fewer kernel vulnerabilities 
+compared to existing virtualization systems like VirtualBox, VMWare Workstation, Docker and Graphene.  
+
+\end{abstract}
