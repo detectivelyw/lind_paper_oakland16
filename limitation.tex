@@ -1,0 +1,37 @@
+\section{Study Limitations/Exceptions and Future Work}
+\label{sec.limitation}
+
+While these early results are promising, 
+it should be noted that there were a few limitations on the scope 
+of the study that may need to be addressed in future studies. 
+First of all, our metric relies on identifying lines of code in the kernel that 
+are executed when running applications in security systems. 
+This would be difficult to utilize in systems that modify the kernel in substantial ways. 
+The consequences could be inaccurate, or incomplete results. 
+
+A second issue is that our criteria for determining if a kernel trace is safe or risky 
+was to check it against a list of historical kernel bugs. However, not all bugs can be 
+accurately checked in this manner. For example, some bugs caused by a race condition, 
+cannot be identified by directly checking if certain lines of code are executed. 
+For complicated bugs that involve defects in the internal kernel data structures, 
+or require complex triggering conditions across multiple kernel paths, our metric 
+will not be able to accurately determine whether or not those bugs have been triggered. 
+In such cases, more complex metrics might be needed for detection.  
+
+Lastly, while Lind executes programs like Apache and Tor, 
+it does not support every system call or every possible set of arguments. 
+For example,  symbolic links are not supported.  While the SafePOSIX implementation 
+could be extended to do so, we leave this for future work. 
+Also, as mentioned in the previous section, Lind has not been optimized for performance, 
+so the results we present here should be taken as a baseline of what is possible.
+
+There were also some avenues we intentionally excluded in this initial study that could form 
+the basis for interesting research projects in the future. First, we chose not to explore bugs 
+within the applications themselves.  We also did not test if our metric applied to hypervisors, 
+which would certainly be an important area to address. 
+
+Other future investigations could center on the use of our metric in other popular operating systems, 
+such as Windows and Mac OS. Our experiments were limited to Linux kernel 3.14.1 
+and some of the typical virtualization systems that existed in Linux. 
+It would be interesting and potentially quite beneficial to the advance of secure systems 
+if similar tests could be run in those other widely-used operating systems. 
