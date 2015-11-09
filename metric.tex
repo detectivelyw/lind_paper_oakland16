@@ -1,4 +1,5 @@
-\section{Developing and Assessing a Quantitative Evaluation Metric for Kernel Security}
+\section{Developing and Assessing a Quantitative Evaluation Metric for
+Kernel Security}
 \label{sec.metric}
 
 In this section, we describe in detail the aforementioned metric to 
@@ -11,100 +12,154 @@ and to reveal which portions contained fewer bugs.
 \subsection{Key Hypothesis}
 
 Our hypothesis is that kernel paths executed by popular applications, 
-such as Web browsers, or file editors, are likely to contain fewer exploitable bugs 
-than uncommonly used paths. Our reasoning is that, because they are frequently used, 
+such as Web browsers, or file editors, are likely to contain fewer
+exploitable bugs 
+than uncommonly used paths. Our reasoning is that, because they are
+frequently used, 
 bugs and vulnerabilities in these ``common kernel paths,'' as we call them 
 would have most likely been caught by developers. 
 Note that this does more than indicate which system calls should be used. 
-A metric that looks at commonly used kernel paths also excludes odd execution paths 
+A metric that looks at commonly used kernel paths also excludes odd
+execution paths 
 through popular system calls. 
-This means that the chances to harbor kernel bugs in those commonly used kernel paths are slim. 
+This means that the chances to harbor kernel bugs in those commonly used
+kernel paths are slim. 
 
-The procedure for testing the hypothesis is described, and the results discussed, in the following sections. 
+The procedure for testing the hypothesis is described, and the results
+discussed, in the following sections. 
 
-\subsection{Foundation for the Metric: Capturing and Evaluating Kernel Traces}
+\subsection{Foundation for the Metric: Capturing and Evaluating Kernel
+Traces}
 
-The first step in proving our hypothesis was to capture the lines of kernel code executed 
-when running applications. The OS kernel code is organized under different kernel directories. 
-Whenever an application tries to access system resources, such as file system I/O and memory, 
+The first step in proving our hypothesis was to capture the lines of kernel
+code executed 
+when running applications. The OS kernel code is organized under different
+kernel directories. 
+Whenever an application tries to access system resources, such as file
+system I/O and memory, 
 the kernel code under the corresponding paths is executed. Therefore, 
-its code execution reflects the basic behavior of the kernel, in response to user application requests. 
-Our metric first identified and captured what lines of code in the kernel are executed 
-when running an user program. We called the resulting captured lines of code a kernel trace. 
+its code execution reflects the basic behavior of the kernel, in response
+to user application requests. 
+Our metric first identified and captured what lines of code in the kernel
+are executed 
+when running an user program. We called the resulting captured lines of
+code a kernel trace. 
 A kernel trace is closely related to the program that generated the trace. 
-Therefore, by using the kernel traces, a comparison between different security systems is possible. 
-To capture the kernel trace, we used gcov \cite{gcov}, a program profiling tool, 
+Therefore, by using the kernel traces, a comparison between different
+security systems is possible. 
+To capture the kernel trace, we used gcov \cite{gcov}, a program profiling
+tool, 
 which  is a standard utility with the GNU Compiler Collection (GCC) suite. 
 
-The second step was to evaluate security aspects of the kernel traces that we captured. 
-Using the historical kernel vulnerability reports, we collected a list of severe kernel bugs from 
-the National Vulnerability Database, the U.S. government repository of standards- based 
-vulnerability management data \cite{NVD}. For each bug, we identified the lines of code 
+The second step was to evaluate security aspects of the kernel traces that
+we captured. 
+Using the historical kernel vulnerability reports, we collected a list of
+severe kernel bugs from 
+the National Vulnerability Database, the U.S. government repository of
+standards- based 
+vulnerability management data \cite{NVD}. For each bug, we identified the
+lines of code 
 in the kernel that would trigger it. This can be done by examining 
 a patch of the Linux kernel source code to fix the bug. From the patch, 
-we can identify which lines of kernel code need to be modified in order to remove the bug. 
-A user program that executes the lines of code changed by a patch to fix a kernel bug 
+we can identify which lines of kernel code need to be modified in order to
+remove the bug. 
+A user program that executes the lines of code changed by a patch to fix a
+kernel bug 
 is considered to have the potential to exploit that flaw.
 
 We determined that the lines of code in the kernel would be risky 
 if they trigger one or more kernel vulnerability, and those lines of code 
-that do not are considered to be safe. Using the above kernel trace analysis, 
-we empirically labeled the lines of code in the kernel that contain fewer bugs as safe lines. 
+that do not are considered to be safe. Using the above kernel trace
+analysis, 
+we empirically labeled the lines of code in the kernel that contain fewer
+bugs as safe lines. 
 The safe lines of code would then compose the safe portion of the kernel, 
-which can be trusted to build a secure trusted computing base for secure systems.
+which can be trusted to build a secure trusted computing base for secure
+systems.
 
 \subsection{Verification of Hypothesis}
 
-To complete the verification of our hypothesis that commonly used kernel paths contain fewer bugs, 
-we first identified these paths as a subset of the total reachable kernel paths. These were obtained as follows:
+To complete the verification of our hypothesis that commonly used kernel
+paths contain fewer bugs, 
+we first identified these paths as a subset of the total reachable kernel
+paths. These were obtained as follows:
 
 \begin{enumerate}
 \item Common paths were captured by running popular user applications. 
-We ran applications that are commonly used on a daily basis, such as a Web browser, file editor, and others. 
-In our experiments, we ran Firefox, Chrome, Gedit, and Claws Mail on Native Linux, 
-and performed basic file system operations like open a file, close a file, make a directory, 
-and delete a directory. We ran the experiments 3-4 hours a day for  5 days in a row.
+We ran applications that are commonly used on a daily basis, such as a Web
+browser, file editor, and others. 
+In our experiments, we ran Firefox, Chrome, Gedit, and Claws Mail on Native
+Linux, 
+\cappos{What version of Linux?}
+and performed basic file system operations like open a file, close a file,
+make a directory, 
+and delete a directory. We ran the experiments 3-4 hours a day for  5 days
+in a row.
 
-\item Total reachable paths were captured by system call fuzzing and running the Linux kernel test suite. 
-We tried to capture the total reachable paths in the kernel as completely as possible. 
+\item Total reachable paths were captured by system call fuzzing and
+running the Linux kernel test suite. 
+We tried to capture the total reachable paths in the kernel as completely
+as possible. 
 Two approaches were combined to capture this trace.
 
 \begin{itemize}
-\item First, our system call fuzzing used the Trinity system call fuzz tester \cite{Trinity}, 
+\item First, our system call fuzzing used the Trinity system call fuzz
+tester \cite{Trinity}, 
 and ran system calls exhaustively with all possible arguments and options. 
-We fuzzed more than 300 available system calls, including file management and network system calls, 
-which gave us a thorough kernel trace. In addition, we ran a Linux kernel test suite, 
-Linux Test Project (LTP) \cite{LTP} to help capture the total reachable kernel trace. 
-Linux Test Project is a mature and well maintained tool to test the Linux kernel. 
-We ran all the available system call test cases with this tool to capture the kernel trace. 
-Combining the kernel traces generated by Trinity and LTP, we were able to access our total reachable kernel paths.
+We fuzzed more than 300 available system calls, including file management
+and network system calls, 
+which gave us a thorough kernel trace. In addition, we ran a Linux kernel
+test suite, 
+Linux Test Project (LTP) \cite{LTP} to help capture the total reachable
+kernel trace. 
+Linux Test Project is a mature and well maintained tool to test the Linux
+kernel. 
+We ran all the available system call test cases with this tool to capture
+the kernel trace. 
+Combining the kernel traces generated by Trinity and LTP, we were able to
+access our total reachable kernel paths.
 \end{itemize}
 \end{enumerate}
 
-Based on the above method, we found that 38.5\% of the total reachable kernel paths are commonly used. 
-More importantly, only 2.5\% of the bugs examined were found in the common paths, 
+Based on the above method, we found that 38.5\% of the total reachable
+kernel paths are commonly used. 
+More importantly, only 2.5\% of the bugs examined were found in the common
+paths, 
 while 50\% of the bugs were found in the total reachable kernel paths. 
-Our results confirm that common paths contain fewer bugs than uncommon paths. 
+Our results confirm that common paths contain fewer bugs than uncommon
+paths. 
 
 \subsubsection{Coverage Analysis of Common Paths}
 
-The kernel trace coverage of the common paths and the total reachable paths are shown in Table \ref{table:kernel_coverage}. 
-The results show that the size of commonly-used kernel paths is small, merely 12.4\% of the entire kernel code base. 
-The common paths coverage is also significantly smaller than the total reachable paths coverage 
+The kernel trace coverage of the common paths and the total reachable paths
+are shown in Table \ref{table:kernel_coverage}. 
+The results show that the size of commonly-used kernel paths is small,
+merely 12.4\% of the entire kernel code base. 
+The common paths coverage is also significantly smaller than the total
+reachable paths coverage 
 (about 1/3 of the entire kernel).
 
-At first look, it may appear surprising that the total reachable paths coverage is not 100\%, 
-and accounts for only about one-third of the entire kernel. One reason is that many paths 
-in the kernel cannot be accessed from user programming API. Another reason is that 
-while obtaining the kernel coverage data, as most researchers did, we used a system call fuzzing tool 
-and a Linux test suite to generate the kernel trace. The existing fuzzing tools and test suite 
-cannot reach every possible path in the kernel. This is consistent with kernel code coverage analysis 
+At first look, it may appear surprising that the total reachable paths
+coverage is not 100\%, 
+and accounts for only about one-third of the entire kernel. One reason is
+that many paths 
+in the kernel cannot be accessed from user programming API. Another reason
+is that 
+while obtaining the kernel coverage data, as most researchers did, we used
+a system call fuzzing tool 
+and a Linux test suite to generate the kernel trace. The existing fuzzing
+tools and test suite 
+cannot reach every possible path in the kernel. This is consistent with
+kernel code coverage analysis 
 measurements conducted by other researchers \cite{LTP-Coverage}.
 
-Although the total reachable paths coverage is not 100\% of the entire kernel code base, 
+Although the total reachable paths coverage is not 100\% of the entire
+kernel code base, 
 it is still very large and contains many bugs. 
-However, because the commonly used kernel path coverage is much smaller than 
-the total reachable path coverage, this is a positive indication that these relatively small areas can be considered safe.
+However, because the commonly used kernel path coverage is much smaller
+than 
+the total reachable path coverage, this is a positive indication that these
+relatively small areas can be considered safe.
 
 \begin{table}
 \centering
@@ -122,20 +177,30 @@ the total reachable path coverage, this is a positive indication that these rela
 \label{table:kernel_coverage}
 \end{table}
 
-The results from Figure \ref{fig:subset} and Figure \ref{fig:key_paths_trace} show that the common paths are a subset of the total reachable paths, 
-shown by the ``OverlappedLines'' in Figure \ref{fig:subset} and Figure \ref{fig:key_paths_trace}. 
+The results from Figure \ref{fig:subset} and Figure
+\ref{fig:key_paths_trace} show that the common paths are a subset of the
+total reachable paths, 
+shown by the ``OverlappedLines'' in Figure \ref{fig:subset} and Figure
+\ref{fig:key_paths_trace}. 
 We closely examined the kernel trace derived from common paths, 
-and the total reachable paths, and we found that, for each different path in the kernel, the lines of code 
-in the common paths trace also appeared in the total reachable paths trace. But there are many lines of code (more than 50\%) 
-in the total reachable paths trace that are not in the common paths. This shows that the common paths trace and 
-the total reachable paths we obtained are correct, because common paths in the kernel should definitely be reachable. 
-One interesting finding about our results is that the common paths account for only 38.5\% of the total reachable paths. 
-This suggests that a large portion (61.5\%) of the kernel is not frequently used by popular applications on a daily basis.
+and the total reachable paths, and we found that, for each different path
+in the kernel, the lines of code 
+in the common paths trace also appeared in the total reachable paths trace.
+But there are many lines of code (more than 50\%) 
+in the total reachable paths trace that are not in the common paths. This
+shows that the common paths trace and 
+the total reachable paths we obtained are correct, because common paths in
+the kernel should definitely be reachable. 
+One interesting finding about our results is that the common paths account
+for only 38.5\% of the total reachable paths. 
+This suggests that a large portion (61.5\%) of the kernel is not frequently
+used by popular applications on a daily basis.
 
 \begin{figure}
 \centering
 \includegraphics[width=1.0\columnwidth]{diagram/lind_oakland16_diagram_01.pdf}
-\caption{Kernel Trace Comparison: Common Paths as a Subset of Reachable Paths}
+\caption{Kernel Trace Comparison: Common Paths as a Subset of Reachable
+Paths}
 \label{fig:subset}
 \end{figure}
 
@@ -146,72 +211,112 @@ This suggests that a large portion (61.5\%) of the kernel is not frequently used
 \label{fig:key_paths_trace}
 \end{figure}
 
-\subsubsection{Security Analysis of Kernel Paths\textendash Locating the Risky Portions}
+\subsubsection{Security Analysis of Kernel Paths\textendash Locating the
+Risky Portions}
 
-The next step in evaluating our hypothesis was to check which portions of the kernel contained 
-the most or the fewest kernel bugs. We examined 40 severe Linux kernel bugs, 
-ones which had been discovered by the research community in the last five years (the first two columns in Table 
+The next step in evaluating our hypothesis was to check which portions of
+the kernel contained 
+the most or the fewest kernel bugs. We examined 40 severe Linux kernel
+bugs, 
+ones which had been discovered by the research community in the last five
+years (the first two columns in Table 
 \ref{table:vulnerabilities_commonly_used_kernel_paths}). 
-We used these kernel bugs to check if vulnerabilities existed in certain kernel traces. 
-The results of our experiment are shown the last two columns in Table \ref{table:vulnerabilities_commonly_used_kernel_paths}.
+We used these kernel bugs to check if vulnerabilities existed in certain
+kernel traces. 
+The results of our experiment are shown the last two columns in Table
+\ref{table:vulnerabilities_commonly_used_kernel_paths}.
 
 \begin{table*}[!ht]
 \scriptsize
 \centering
 \begin{tabular}{|l|l|c|c|}\hline
-\multirow{2}{*}{\textbf{Vulnerability}} & \multirow{2}{*}{\textbf{Specific Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
+\multirow{2}{*}{\textbf{Vulnerability}} & \multirow{2}{*}{\textbf{Specific
+Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
 \cline{3-4}
 &  & \textbf{Total Reachable Paths} &  \textbf{Common Paths} \\ \hline
 
- CVE-2014-9529 & concurrency, race condition & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2014-3631 & NULL pointer dereference & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2012-6657 & network socket variable mischeck & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2014-9529 & concurrency, race condition & {\color{red}\ding{51}} &
+\ding{55} \\
+ CVE-2014-3631 & NULL pointer dereference & {\color{red}\ding{51}} &
+\ding{55} \\
+ CVE-2012-6657 & network socket variable mischeck & {\color{red}\ding{51}}
+& \ding{55} \\
  CVE-2014-5207 & privilege escalation & \ding{55} & \ding{55} \\
  CVE-2014-5206 & privilege escalation & \ding{55} & \ding{55} \\
  CVE-2014-3153 & privilege escalation & \ding{55} & \ding{55} \\
  CVE-2014-2851 & privilege escalation & \ding{55} & \ding{55} \\
- CVE-2014-2706 & race condition, DoS & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2014-0100 & race condition, DoS & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2014-2706 & race condition, DoS & {\color{red}\ding{51}} & \ding{55}
+\\
+ CVE-2014-0100 & race condition, DoS & {\color{red}\ding{51}} & \ding{55}
+\\
  CVE-2014-0049 & buffer overflow & \ding{55} & \ding{55} \\
  CVE-2012-6638 & DoS & {\color{red}\ding{51}} & \ding{55} \\
  CVE-2014-0038 & privilege escalation & \ding{55} & \ding{55} \\
  CVE-2013-6368 & privilege escalation & \ding{55} & \ding{55} \\
- CVE-2013-4587 & index error, privilege escalation & \ding{55} & \ding{55} \\
- CVE-2013-4563 & size/boundary check, DoS & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2013-4587 & index error, privilege escalation & \ding{55} & \ding{55}
+\\
+ CVE-2013-4563 & size/boundary check, DoS & {\color{red}\ding{51}} &
+\ding{55} \\
  CVE-2013-4348 & value validation error & \ding{55} & \ding{55} \\
- CVE-2013-4300 & privilege escalation & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2013-4300 & privilege escalation & {\color{red}\ding{51}} & \ding{55}
+\\
  CVE-2013-1943 & privilege escalation & \ding{55} & \ding{55} \\
- CVE-2013-2094 & privilege escalation & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2013-3301 & NULL pointer dereference, DoS & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2013-1858 & privilege escalation & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2013-2094 & privilege escalation & {\color{red}\ding{51}} & \ding{55}
+\\
+ CVE-2013-3301 & NULL pointer dereference, DoS & {\color{red}\ding{51}} &
+\ding{55} \\
+ CVE-2013-1858 & privilege escalation & {\color{red}\ding{51}} & \ding{55}
+\\
  CVE-2013-1797 & use-after-free & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2013-1763 & privilege escalation, index error & \ding{55} & \ding{55} \\
+ CVE-2013-1763 & privilege escalation, index error & \ding{55} & \ding{55}
+\\
  CVE-2013-0310 & NULL pointer dereference & \ding{55} & \ding{55} \\
  CVE-2012-2136 & heap-based buffer overflow & \ding{55} & \ding{55} \\
  CVE-2012-2100 & lack of sanity check  & \ding{55} & \ding{55} \\
- CVE-2012-0028 & privilege escalation & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2011-2517 & privilege escalation, buffer overflow & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2012-2123 & privilege escalation  & {\color{red}\ding{51}} & \ding{55} \\
+ CVE-2012-0028 & privilege escalation & {\color{red}\ding{51}} & \ding{55}
+\\
+ CVE-2011-2517 & privilege escalation, buffer overflow &
+{\color{red}\ding{51}} & \ding{55} \\
+ CVE-2012-2123 & privilege escalation  & {\color{red}\ding{51}} & \ding{55}
+\\
  CVE-2012-1146 & NULL pointer dereference  & \ding{55} & \ding{55} \\
  CVE-2012-0207 & divide-by-zero error and panic & \ding{55} & \ding{55} \\
- CVE-2011-2525 & NULL pointer dereference  & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2011-1076 & NULL pointer dereference  & {\color{red}\ding{51}} & \ding{55} \\
- CVE-2011-2184 & NULL pointer dereference, none initialization & \ding{55} & \ding{55} \\
+ CVE-2011-2525 & NULL pointer dereference  & {\color{red}\ding{51}} &
+\ding{55} \\
+ CVE-2011-1076 & NULL pointer dereference  & {\color{red}\ding{51}} &
+\ding{55} \\
+ CVE-2011-2184 & NULL pointer dereference, none initialization & \ding{55}
+& \ding{55} \\
  CVE-2010-2478 & integer overflow & {\color{red}\ding{51}} & \ding{55} \\
  CVE-2010-2960 & NULL pointer dereference  & \ding{55} & \ding{55} \\
- CVE-2010-2492 & privilege escalation, buffer overflow & \ding{55} & \ding{55} \\
- CVE-2010-2240 & stack overflow & {\color{red}\ding{51}} & {\color{red}\ding{51}}\\
+ CVE-2010-2492 & privilege escalation, buffer overflow & \ding{55} &
+\ding{55} \\
+ CVE-2010-2240 & stack overflow & {\color{red}\ding{51}} &
+{\color{red}\ding{51}}\\
  CVE-2010-1188 & use-after-free & \ding{55} & \ding{55} \\
- CVE-2010-0437 & NULL pointer dereference  & {\color{red}\ding{51}} & \ding{55} \\ \hline
- \multicolumn{2}{|c|}{\bf Percentage contains bugs} & {\bf $50\%$} & {\bf $2.5\%$} \\ \hline
+ CVE-2010-0437 & NULL pointer dereference  & {\color{red}\ding{51}} &
+\ding{55} \\ \hline
+ \multicolumn{2}{|c|}{\bf Percentage contains bugs} & {\bf $50\%$} & {\bf
+$2.5\%$} \\ \hline
 \end{tabular}
-\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of the Kernel 
-({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability not in paths)}
+\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of
+the Kernel 
+({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability
+not in paths)}
 \label{table:vulnerabilities_commonly_used_kernel_paths}
 \end{table*}
 
-From the results, we can see that commonly used kernel paths contain only 2.5\% of the bugs we had targeted. 
-Since the total reachable kernel paths contain 50\% of the bugs we examined, 
-our results show that commonly used kernel paths clearly contain fewer bugs than other portions of the kernel. 
-Our hypothesis and findings provide insights and guidelines for new designs of secure systems, 
+From the results, we can see that commonly used kernel paths contain only
+2.5\% of the bugs we had targeted. 
+Since the total reachable kernel paths contain 50\% of the bugs we
+examined, 
+our results show that commonly used kernel paths clearly contain fewer bugs
+than other portions of the kernel. 
+\cappos{Why?}
+Our hypothesis and findings provide insights and guidelines for new designs
+of secure systems, 
 which will be discussed in the next section. 
+
+
+
+
