@@ -1,0 +1,91 @@
+\section{Related Work}
+\label{sec.related_work}
+
+While our metric and the resulting Lind prototype represent a novel approach 
+to privileged code protection, it does build on the idea of providing 
+strong isolation between the kernel space and the user space 
+which has been pioneered by a number of existing techniques. 
+In this section, we take a close look at three categories of techniques 
+that share similar security goals as Lind.
+
+\subsection{Virtualization}
+
+Programming language virtualization, such as Java \cite{Java}, Lua \cite{Lua}, Silverlight \cite{Silverlight}, 
+and JavaScript \cite{JavaScript} are commonly used programming language sandboxes 
+that have achieved widespread adoption. The key idea of this technique is 
+to run code within a special process that checks the safety of operations. 
+These sandboxes combine untrusted application code with an interpreter 
+and standard libraries that consolidate routines to perform I/O, network communication, 
+and other system sensitive functions. Though many sandboxes implement 
+the bulk of their standard libraries in a memory-safe language like Java or C\# \cite{CSharp}, 
+flaws in memory-safe code can still pose a threat. In fact, many security critical bugs 
+can be found in the standard libraries \cite{JavaBugs}. Researchers have also discovered 
+many severe bugs in Java \cite{Java-Lessons}.  Unfortunately, any bug or failure 
+in a programming language virtual machine is usually fatal. Lind offers better security 
+than the above virtual machines, because of its very small TCB of only about 8K LOC, 
+making it is easier to secure. In addition, since the POSIX implementation in Lind is 
+written with Repy and contained in a sandbox, bugs and failures in our POSIX implementation 
+will be isolated and will not cause fatal damage.
+
+OS virtualization is widely used to isolate untrusted applications that share the same hardware. 
+There are a few varieties, such as bare-metal hardware virtualization (Type-I Virtualization), 
+which include VMware ESX Server \cite{VMWare-ESX-Server}, XEN \cite{Xen-03}, LXC \cite{LXC}, 
+Jails \cite{Jails}, Zones \cite{Zones}, and MS Hyper-V \cite{Microsoft-Hyper-V}. 
+Another type is hosted hardware virtualization (Type-II Virtualization), such as VMware Workstation \cite{VMWare-Workstation}, 
+VMware Server \cite{VMWare-Server}, MS Virtual PC \cite{Microsoft-Virtual-PC} and VirtualBox \cite{VirtualBox}. 
+However, there are limitations with virtualization. 
+Virtualization hypervisors suffer from attack vectors, including architectural and software vulnerability, 
+and configuration risk. For example, the small code footprint of a hypervisor can become a potential vulnerability 
+and lead to serious problems. In addition, OS virtualization systems are made up of a very large body of 
+OS code with a complex interface, both of which make it very difficult to guarantee secure isolation. 
+Attackers can easily find vulnerabilities to escape these systems and access arbitrary code 
+in the underlying host systems. Lind addresses these concerns by using a much smaller and safer TCB.
+
+Library OSes are a useful approach for applications to efficiently obtain the benefits of virtual machines, 
+including security isolation, host platform compatibility, and migration. Drawbridge \cite{Drawbridge-11} is a new program 
+that uses lightweight processes and a library OS to present a Windows persona to a wide variety of Windows applications. 
+This is accomplished by moving a large portion of the OS into the process, and presenting a simplified system 
+virtual machine-like interface to each process. This approach brings many of the benefits of VM based temporal, 
+spatial and fault isolation properties to a per-process level. Bascule \cite{Bascule}, an architecture for library OS extensions 
+based on Drawbridge, allows application behavior to be customized by extensions loaded at runtime. 
+Graphene \cite{Graphene-14} is a recent library OS system that seamlessly and efficiently executes both single and 
+multi-process applications, generally with low memory and performance overheads. 
+It broadens the library OS paradigm to support secure, multi-process APIs, such as copy-on-write fork, signals, 
+and System V IPC. Haven \cite{Haven} uses a library OS to implement shielded execution of unmodified server applications 
+in an untrusted cloud host. Haven leverages the hardware protection of Intel SGX to defend against 
+privileged code and physical attacks, such as memory probes, but also addresses the dual challenges of 
+executing unmodified legacy binaries and protecting them from a malicious host. 
+The library OS technique is similar to Lind but differs in the fact that existing library OS systems rely heavily on 
+the underlying kernels to perform system functions, while Lind only relies on a very limited set of system functions, 
+and reconstructs most OS functions with our own safe Repy code. 
+
+\subsection{System Call Interposition}
+
+System call interposition offers a number of properties that make it attractive for building sandboxes, 
+though it can be error prone \cite{SCI-04}. Approaches for delegation and filtering have been extensively studied, 
+along with their respective tradeoffs between security and performance. 
+Janus Version 2 (J2) \cite{Janus0:96, Janus:99} uses filtering and sandboxing, while Ostia \cite{SCI-04} uses a delegation. 
+Ostia also provides a hybrid interposition architecture, which allows for kernel level enforcement and user policies. 
+The kernel module enforces policy, denies direct access to restricted resources, 
+and delegates certain calls to the emulation library, which sends transformed system calls to the agents. 
+The agent reads the policy file and handles the delegation of calls. However, system call interposition has many problems. 
+OS semantics are very difficult to replicate correctly. Indirect paths to resources are often overlooked, 
+and there are side effects to denying system calls \cite{Problems-SCI}. 
+Nevertheless, this technique is very useful and has inspired many new techniques, such as library OSes. 
+The concepts behind System Call Interposition have evolved into other modern techniques 
+and has benefitted many security systems, including Lind. 
+
+\subsection{Software Fault Isolation}
+Software Fault Isolation (SFI) is a sandboxing technique in which native instructions can only be executed 
+if they do not violate the sandbox's constraints \cite{SFI:93}. Instructions usually exclude any directions that 
+could jump outside the program's predefined memory region or execute a system call. 
+Programs must use a specific compiler, which enforces these constraints before the programs are validated on load. 
+Nooks \cite{Nooks:03} isolates Linux kernel modules, so that if they crash, the whole kernel does not crash as well. 
+They use two techniques: sandboxing and micro-reboots. Nooks uses both as SFI-based and user-level sandboxes. 
+Micros-reboots conceptually refresh small parts of the system. 
+Google's Native Client \cite{NaCl-09} adopts SFI to execute untrusted x86 binary code safely. 
+We leveraged this technique and used NaCl in our system Lind. The difference is that SFI doesn't handle the manner 
+in which systems interact with the underlying OS. In NaCl, to perform system calls, 
+it relies on a trusted service runtime for thread creation, memory management, and other system services. 
+In Lind, we redirect system call requests to our safe POSIX interface, 
+which allows Lind to control its own interaction with the underlying OS kernel.
