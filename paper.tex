@@ -1,0 +1,89 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Header: Document Class, Packages, and New Commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[conference]{IEEEtran}
+
+\usepackage{booktabs}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{pifont}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{makecell}
+\newcommand{\urlwofont}[1]{\underline{\urlstyle{same}\url{#1}}}
+
+\newif\ifrev
+%  COMMENT OUT NEXT LINE TO HIDE TODOs AND COMMENTS
+\revtrue
+
+\ifrev
+  \newcommand{\yanyan}[1]{{\color{blue} [Yanyan: #1]}}
+  \newcommand{\cappos}[1]{{\color{red} [Justin: #1]}}
+  \newcommand{\lois}[1]{{\color{magenta} [Lois: #1]}}
+  \newcommand{\yiwen}[1]{{\color{OliveGreen} [Yiwen: #1]}}
+  \newcommand{\todo}[1]{{\color{Orange} [TODO: #1]}}
+\else
+  \newcommand{\yanyan}[1]{}
+  \newcommand{\cappos}[1]{}
+  \newcommand{\lois}[1]{}
+  \newcommand{\yiwen}[1]{}
+  \newcommand{\todo}[1]{}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Title and Authors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Lind: Shielding Privileged Code From Untrusted Programs 
+Through Controlled Kernel Access}
+
+\author{\IEEEauthorblockN{Yiwen Li}
+\IEEEauthorblockA{New York Univeristy \\
+Email: liyiwen@nyu.edu}
+\and
+\IEEEauthorblockN{Ali Gholami}
+\IEEEauthorblockA{KTH Royal Institute of Technology \\
+Email: gholami@kth.se}
+\and
+\IEEEauthorblockN{Yanyan Zhuang}
+\IEEEauthorblockA{University of British Columbia \\
+Email: yyzh@cs.ubc.ca}
+\and
+\IEEEauthorblockN{Justin Cappos}
+\IEEEauthorblockA{New York University \\
+Email: jcappos@nyu.edu}
+}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Sections
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{introduction}
+\input{motivation-and-background}
+\input{metric}
+\input{design}
+\input{implementation}
+\input{evaluation}
+\input{limitation}
+\input{related_work}
+\input{conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{paper}
+
+\end{document}
