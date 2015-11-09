@@ -1,0 +1,93 @@
+\section{Motivation and Background}
+\label{sec.motivation-and-background}
+
+In this section, we present some background information 
+relevant to the development of our design metric and the Lind prototype, 
+including a broader discussion of the problem of kernel exploitation, 
+and the limitations of previous protection strategies caused by 
+an inability to identify which portions of the kernel are risky. 
+Lastly, we share a few assumptions about the specific threats 
+that the safety metric and the Lind prototype system are designed to address.
+
+\subsection{Understanding the Problem}
+
+Running user applications inevitably relies on the operating system kernel 
+accessing critical resources, such as memory, I/O, or CPU. 
+The kernel provides an interface to serve these requests 
+and provides essential functionality for all applications running in the system. 
+Thus all code, whether it is sandboxed or untrusted, will make calls 
+that are eventually processed by the kernel. 
+
+Unfortunately, operating system kernels are not safe and secure from attackers. 
+Over the past few years, the exploitation of OS kernels has been wide spread, 
+despite substantial efforts by researchers and practitioners. 
+In 2014, 215 vulnerabilities in all types of kernels were reported \cite{NVD}, 
+and 125 of those  vulnerabilities were in the Linux kernel. 
+Compared to user-level applications, the kernel has a huge codebase and 
+an attack surface that keeps increasing due to the constant addition of new features \cite{Metrics-13}. 
+Indeed, the size of the Linux kernel, in terms of lines of code, 
+has more than doubled, from 6.6 MLOC in v2.6.11 (March 2005) to 16.9 MLOC in v3.10 (June 2013) \cite{Linux-13}. 
+
+Such a huge kernel codebase has lead to excessive exploitation. 
+As a result, the Linux kernel has been plagued by a number of common software flaws. 
+These flaws have raised serious security concerns and caused severe damage to systems. 
+Stack and heap buffer overflow vulnerabilities have been leveraged to 
+cause denial of service (system crash) \cite{CVE-2009-3234}, \cite{CVE-2013-2892} and the execution of arbitrary code \cite{CVE-2009-3234}, 
+or to allow local users to gain privileges via a crafted application \cite{CVE-2013-1828}. 
+Memory disclosure vulnerabilities have been exploited to allow local users to read 
+the contents of some kernel memory locations \cite{CVE-2009-3002}, or to obtain potentially 
+sensitive information from kernel stack memory \cite{CVE-2010-4073}. 
+Attackers have also used use-after-free vulnerability to gain kernel privileges \cite{CVE-2013-4343}.
+
+The number of kernel vulnerabilities and their potential for exploitation, 
+plus the fact that user applications rely on the kernel to execute programs, 
+present a compelling motive for designing securer systems that can run applications with a better degree of safety.
+
+\subsection{Identifying and  Quantifying Risky Areas in the Kernel}
+
+A contributing factor to the kernel security problem is that system designers 
+still lack a standard method for quantifying the safety (or risk) of privileged code. 
+Researchers have studied and explored different metrics to identify and predict bugs in software systems. 
+The number of lines of code has been used as one predictor \cite{Bug-Location}, as has a file's revision status and 
+whether or not the file previously contained bugs \cite{lewis2013does}, \cite{Bug-Location}. Studies have also been done based on 
+the number of functions and/or the number of executable lines of code in the function \cite{Mining-Metrics}. 
+While these metrics can be useful in building models to provide a general idea about 
+where bugs may be located in software systems, they have limitations. 
+Firstly, the metrics mentioned above are not specifically designed for studying bugs in OS kernels. 
+Therefore, they do not take into account the way system calls are invoked by user applications. 
+Moreover, these metrics can not provide information about the accurate location of the bugs within the kernel, 
+which is important to our study.
+
+Without any type of guidance as to what parts of the kernel are safe, past initiatives, 
+such as building a sandbox or using library OSes, could only focus on isolating user programs. 
+These methods can mitigate the problem, but the proposed systems will still access the kernel the same way as before. 
+They simply move the attack surface from between the user space and the kernel, 
+to between these new systems and the kernel, but the surface is not necessarily reduced. 
+As a result, the proposed solutions do not make the systems more secure. 
+
+Recognizing this limitation, we proposed a novel security metric to quantitatively measure and evaluate the kernel: 
+checking kernel coverage safety at the level of lines of code against existing kernel bugs. 
+With this metric, we would be better able to understand security features of the kernel, 
+and design an interface that is exposed to the user space in a secure way. Ideally, 
+this would mean only exposing the safe portions of the kernel to the user space. 
+However, in some cases, risky portions must be exposed to the kernel as well. 
+The kernel coverage safety metric, however, can alert us to the potential dangers and 
+can help us safely-reimplement those risky kernel interface (or system calls) to avoid the potential damage.
+
+\subsection{Threat Assumptions}
+
+The primary goal of a secure system is to restrict a program to some subset of privileges, 
+usually by exposing a set of functions that mediate access to the underlying operating system privileges. 
+Threats occur when applications obtain access to privileges that were not intentionally granted by the system, 
+thus losing the intended protection \cite{Repy-10}. In building a system that leverages our security metric, 
+we make the following assumptions about the threat we seek to address.
+
+\begin{enumerate}
+\item We consider user applications untrusted, and assume that malicious code and unintentional bugs may both reside inside them.
+
+\item We assume that in the version of the operating system kernel running the user applications, 
+the kernel code contains potential zero-day vulnerabilities as well as previously identified and recorded CVE vulnerabilities.
+
+\item Lastly, we assume malicious code or unintentional bugs could realistically be harbored 
+within any security systems placed between the kernel and the user applications.
+\end{enumerate}
