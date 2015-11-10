@@ -60,62 +60,6 @@ programs,
 present a compelling motive for designing securer systems that can run
 applications with a better degree of safety.
 
-\subsection{Identifying and Quantifying Risky Areas in the Kernel}
-
-A contributing factor to the kernel security problem is that system
-designers 
-still lack a standard method for quantifying the safety (or risk) of
-privileged code. 
-Researchers have studied and explored different metrics to identify and
-predict bugs in software systems. 
-The number of lines of code has been used as one 
-predictor~\cite{Bug-Location}, as has a file's revision status and 
-whether or not the file previously contained bugs~\cite{lewis2013does,
-Bug-Location}. Studies have also been done based on 
-the number of functions and/or the number of executable lines of code in
-the function~\cite{Mining-Metrics}. 
-While these metrics can be useful in building models to provide a general
-idea about 
-where bugs may be located in software systems, they have limitations. 
-Firstly, the metrics mentioned above are not specifically designed for
-studying bugs in OS kernels. 
-Therefore, they do not take into account the way system calls are invoked
-by user applications. 
-Moreover, these metrics can not provide information about the accurate
-location of the bugs within the kernel, 
-which is important to our study.
-\cappos{Are you going to show that this is true?  Can you explain more
-about why these do not work?}
-
-Without any type of guidance as to what parts of the kernel are safe, past
-initiatives, 
-such as building a sandbox or using library OSes, could only focus on
-isolating user programs. 
-These methods can mitigate the problem, but the proposed systems will still
-access the kernel the same way as before. 
-They simply move the attack surface from between the user space and the
-kernel, 
-to between these new systems and the kernel, but the surface is not
-necessarily reduced. 
-As a result, the proposed solutions do not make the systems more secure. 
-
-Recognizing this limitation, we proposed a novel security metric to
-quantitatively measure and evaluate the kernel: 
-checking kernel coverage safety at the level of lines of code against
-existing kernel bugs. 
-With this metric, we would be better able to understand security features
-of the kernel, 
-and design an interface that is exposed to the user space in a secure way.
-Ideally, 
-this would mean only exposing the safe portions of the kernel to the user
-space. 
-However, in some cases, risky portions must be exposed to the kernel as
-well. 
-The kernel coverage safety metric, however, can alert us to the potential
-dangers and 
-can help us safely-reimplement those risky kernel interface (or system
-calls) to avoid the potential damage.
-
 \subsection{Threat Assumptions}
 
 The primary goal of a secure system is to restrict a program to some subset
@@ -129,17 +73,33 @@ that leverages our security metric,
 we make the following assumptions about the threat we seek to address.
 
 \begin{enumerate}
-\item We consider user applications untrusted, and assume that malicious
-code and unintentional bugs may both reside inside them.
+\item We assume that the operating system kernel contains one or more bugs 
+that are known to the attacker.
 
-\item We assume that in the version of the operating system kernel running
-the user applications, 
-the kernel code contains potential zero-day vulnerabilities as well as
-previously identified and recorded CVE vulnerabilities.
+\item We assume the attacker has the ability to execute code inside
+of a virtualized system, such as an operating system VM or library OS.
+The attacker may either have that access by writing a malicious application
+that the user executes or by exploiting a flaw that exists in a user's
+application.
 
-\item Lastly, we assume malicious code or unintentional bugs could
-realistically be harbored 
-within any security systems placed between the kernel and the user
+
+\item We assume that unintentional bugs will exist in any complex code.  This
+includes within any security systems placed between the kernel and the user
 applications.
+
+\item We assume it is possible to provide some form of computational 
+containment.  This means that an isolated program cannot simply
+make arbritrary system calls and access the kernel directly.  This could
+be provided through software-fault isolation~\cappos{cite}, programming 
+language techniques\cappos{cites}, or by running isolated code in a
+distinct region of virtual memory\cappos{cites}.
+
+\item We assume it is possible to build functionality that is extremely
+simple and secure....
+simple and secure is possible, but not complex and secure.
+\cappos{How do I explain
+the sandbox TCB???  How is this different from a hypervisor?}
+
 \end{enumerate}
 
+Note that for the purposes of this work, we are focusing on 
