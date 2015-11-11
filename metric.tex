@@ -169,16 +169,12 @@ Next, the total reachable paths were required to be captured by comprehensive sy
 Two approaches were used to capture this trace.
 
 \begin{itemize}
-\item First, our system call fuzzing used the Trinity system call fuzz
-tester \cite{Trinity}, 
-and ran system calls exhaustively with all possible arguments and options. 
-We fuzzed more than 300 available system calls, including file management
-and network system calls, \yanyan{what is file management?}
-which gave us a thorough kernel trace. 
+\item The system call fuzzing experiment were designed to utilize the Trinity system call fuzz tester \cite{Trinity}. This included sequential execution of more than 300 system calls with 1 million iterations for executing each system call by 16 child processes as Trinity workers.
 
-\item In addition, we ran a Linux kernel test suite, 
-Linux Test Project (LTP) \cite{LTP} to help capture the total reachable
-kernel trace. 
+The including file management and network system calls, \yanyan{what is file management?} which gave us a thorough kernel trace. 
+
+\item Linux Test Project (LTP) \cite{LTP} was another tool that was used to capture the total reachable kernel trace.
+
 \cappos{Why did we do this?  Was this to validate our results?  Did it work?
 Did the test show anything separate from fuzzing?}
 Linux Test Project is a mature and well maintained tool to test the Linux
@@ -296,10 +292,6 @@ The results of our experiment are shown the last two columns in Table
 \begin{table*}[!ht]
 \scriptsize
 \centering
-\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of
-the Kernel 
-({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability
-not in paths)}
 \begin{tabular}{|l|l|c|c|}\hline
 \multirow{2}{*}{\textbf{Vulnerability}} & \multirow{2}{*}{\textbf{Specific
 Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
@@ -370,6 +362,10 @@ Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
  \multicolumn{2}{|c|}{\bf Percentage contains bugs} & {\bf $50\%$} & {\bf
 $2.5\%$} \\ \hline
 \end{tabular}
+\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of
+the Kernel 
+({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability
+not in paths)}
 \label{table:vulnerabilities_commonly_used_kernel_paths}
 \end{table*}
 
