@@ -3,16 +3,23 @@ Kernel Security}
 \label{sec.metric}
 
 
+In this section, we describe in detail the aforementioned metric to 
+quantitatively evaluate kernel security. We first discuss issues with
+commonly used metrics for code complexity. Then we discuss a metric that
+focuses on using kernel code paths used by common applications.  We
+then go on to show how our metric was able to provide a fair comparison of 
+different security systems and their impact on the kernel, 
+and to reveal which portions contained fewer bugs.
 
-\cappos{Need to place this...}
-
-\subsection{Identifying and Quantifying Risky Areas in the Kernel}
-\cappos{Move this to 3.1?}
+\subsection{Previous Risk Metrics for Software}
 
 A contributing factor to the kernel security problem is that system
 designers 
 still lack a standard method for quantifying the safety (or risk) of
-privileged code. 
+privileged code.   \cappos{Is this really true?  No one has ever proposed
+a metric?  We do need to do a more detailed analysis of this.  I would vote
+to remove this sentence regardless...}
+
 Researchers have studied and explored different metrics to identify and
 predict bugs in software systems. 
 The number of lines of code has been used as one 
@@ -74,12 +81,6 @@ calls) to avoid the potential damage.
 
 
 
-In this section, we describe in detail the aforementioned metric to 
-quantitatively evaluate kernel security. We start by presenting 
-the key hypothesis behind its design and how it was verified, 
-then go on to show how our metric was able to provide a fair comparison of 
-different security systems and their impact on the kernel, 
-and to reveal which portions contained fewer bugs.
 
 \subsection{Key Hypothesis}
 
@@ -162,11 +163,11 @@ We ran applications that are commonly used on a daily basis, such as a Web
 browser, file editor, and others. 
 In our experiments, we ran Firefox, Chrome, Gedit, and Claws Mail on Native
 Linux, 
-\cappos{What version of Linux?}
+\cappos{What version of Linux?}  \cappos{Ali: why these apps?}
 and performed basic file system operations like open a file, close a file,
 make a directory, 
 and delete a directory. We ran the experiments 3-4 hours a day for  5 days
-in a row.
+in a row.  \cappos{This all needs to be much better explained...}
 
 \item Total reachable paths were captured by system call fuzzing and
 running the Linux kernel test suite. 
@@ -184,6 +185,8 @@ which gave us a thorough kernel trace. In addition, we ran a Linux kernel
 test suite, 
 Linux Test Project (LTP) \cite{LTP} to help capture the total reachable
 kernel trace. 
+\cappos{Why did we do this?  Was this to validate our results?  Did it work?
+Did the test show anything separate from fuzzing?}
 Linux Test Project is a mature and well maintained tool to test the Linux
 kernel. 
 We ran all the available system call test cases with this tool to capture
@@ -213,25 +216,25 @@ reachable paths coverage
 
 At first look, it may appear surprising that the total reachable paths
 coverage is not 100\%, 
-and accounts for only about one-third of the entire kernel. One reason is
-that many paths 
-in the kernel cannot be accessed from user programming API. Another reason
+and accounts for only about one-third of the entire kernel.  However, 
+this is consistent with kernel code coverage analysis 
+measurements conducted by other researchers \cite{LTP-Coverage}.
+One reason that this occurs is that many paths 
+in the kernel cannot be accessed from the system call API. Another reason
 is that 
 while obtaining the kernel coverage data, as most researchers did, we used
 a system call fuzzing tool 
 and a Linux test suite to generate the kernel trace. The existing fuzzing
-tools and test suite 
-cannot reach every possible path in the kernel. This is consistent with
-kernel code coverage analysis 
-measurements conducted by other researchers \cite{LTP-Coverage}.
+tools and test suite do not reach every possible path in the kernel.
+\cappos{Why?}
 
-Although the total reachable paths coverage is not 100\% of the entire
-kernel code base, 
-it is still very large and contains many bugs. 
-However, because the commonly used kernel path coverage is much smaller
-than 
-the total reachable path coverage, this is a positive indication that these
-relatively small areas can be considered safe.
+%Although the total reachable paths coverage is not 100\% of the entire
+%kernel code base, 
+%it is still very large and contains many bugs. 
+%However, because the commonly used kernel path coverage is much smaller
+%than 
+%the total reachable path coverage, this is a positive indication that these
+%relatively small areas can be considered safe.
 
 \begin{table}
 \centering
@@ -250,7 +253,8 @@ relatively small areas can be considered safe.
 \end{table}
 
 The results from Figure \ref{fig:subset} and Figure
-\ref{fig:key_paths_trace} show that the common paths are a subset of the
+\ref{fig:key_paths_trace}  \cappos{What do these actually mean?}
+show that the common paths are a subset of the
 total reachable paths, 
 shown by the ``OverlappedLines'' in Figure \ref{fig:subset} and Figure
 \ref{fig:key_paths_trace}. 
@@ -287,14 +291,13 @@ Paths}
 Risky Portions}
 
 The next step in evaluating our hypothesis was to check which portions of
-the kernel contained 
-the most or the fewest kernel bugs. We examined 40 severe Linux kernel
+the kernel contained kernel bugs. We examined 40 severe Linux kernel
 bugs, 
 ones which had been discovered by the research community in the last five
 years (the first two columns in Table 
 \ref{table:vulnerabilities_commonly_used_kernel_paths}). 
 We used these kernel bugs to check if vulnerabilities existed in certain
-kernel traces. 
+kernel traces.   \cappos{How?}
 The results of our experiment are shown the last two columns in Table
 \ref{table:vulnerabilities_commonly_used_kernel_paths}.
 
@@ -388,6 +391,7 @@ than other portions of the kernel.
 Our hypothesis and findings provide insights and guidelines for new designs
 of secure systems, 
 which will be discussed in the next section. 
+\cappos{Is this statistically significant?}
 
 
 
