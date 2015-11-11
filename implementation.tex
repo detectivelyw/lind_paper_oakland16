@@ -15,7 +15,7 @@ module
 and Seattle's Repy as the system API module (Figure \ref{fig:architecture}).
 \cappos{What is this saying?  It is repetitive...}
 
-\begin{figure}[h]
+\begin{figure}%[h]
 \centering
 \includegraphics[width=1.0\columnwidth]{diagram/lind_architecture.png}
 \caption{System Overview of Lind}
@@ -161,6 +161,8 @@ regularly used system calls that access the commonly used kernel paths.
   %08 & getlasterror() \\
   %\hline
 %\end{tabular}
+\caption {System Functions in the Repy Sandbox Kernel.  \cappos{Need to
+clearly explain the takeaway.}}
 \begin{tabular}{|l|}
   \hline
   \textbf{Network Functions} \\
@@ -238,8 +240,6 @@ regularly used system calls that access the commonly used kernel paths.
   getlasterror() \\
   \hline
 \end{tabular}
-\caption {System Functions in the Repy Sandbox Kernel.  \cappos{Need to
-clearly explain the takeaway.}}
 \label{table:RepyKernel}
 \end{table}
 
