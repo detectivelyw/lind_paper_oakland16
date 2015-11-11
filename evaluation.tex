@@ -75,7 +75,7 @@ if a specific bug was triggered inside that virtualization system.
 
 \item Lastly, to  analyze the reachable kernel paths for each of the
 virtualization systems, 
-we conducted system call fuzzing (similar to what we did in ?3) to obtain
+we conducted system call fuzzing (similar to what we did in \S{\ref{sec.metric}}) to obtain
 the kernel trace in each system. 
 We repeated the system call fuzzing within Repy as well to obtain its
 kernel trace. 
@@ -233,7 +233,7 @@ As the numbers reveal, Lind accessed the minimum amount of code in the OS
 kernel. More importantly, 
 all the kernel code it accessed was in the safe portion of the kernel, the
 commonly used kernel paths. 
-As we have already verified in ?3.3\cappos{make link}, the safe portion of 
+As we have already verified in \S{\ref{Verification-of-Hypothesis}}, the safe portion of 
 the kernel contains fewer kernel bugs. 
 So it make sense that Lind is less likely to trigger kernel bugs. 
 
@@ -313,8 +313,7 @@ it shows that Lind can provide strong security to run user applications.
 \begin{table}
 \centering
 \scriptsize
-\caption{Reachable Kernel Trace Analysis for the Repy Sandbox.  \cappos{Is
-this correct?}}
+\caption{Reachable Kernel Trace Analysis for the Repy Sandbox. }
 \begin{tabular}{|l|l|l|l|l|}
   \hline
   \multirow{3}{.8cm}{\bf Sandbox} & \multicolumn{4}{c|}{\bf Kernel trace} \\ \cline{2-5}
