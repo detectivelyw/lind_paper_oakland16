@@ -28,11 +28,11 @@ As a result, a vulnerability in the privileged codebase is as much of a security
 risk as an flaw in the kernel.  %However, this privileged code needs to be
 %complex because the system must implement complex 
 % must exist somewhere or else applications will not run. 
-For
-example, a vulnerability in VMWare caused by buffer overflows in the VIX
-API could allow local users to execute arbitrary code in the host
-OS~\cite{CVE-2008-2100}.  \cappos{Yiwen: can you double check and add the
-text about the kernel issues allow exploitation of the host OS?}
+For example, 
+a vulnerability in VMWare's codebase caused by buffer overflows in the VIX
+API could allow local users to escape out of the guest VM and 
+gain privilege escalation to execute arbitrary code in the host
+OS, even shellcode to access the kernel of the host OS. ~\cite{CVE-2008-2100}.  
 \cappos{Revise this paragraph further}
 
 %To address this issue, 
