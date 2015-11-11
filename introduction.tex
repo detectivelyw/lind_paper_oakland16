@@ -3,13 +3,8 @@
 
 To run multiple applications on a computer, it is critical to securely
 manage access to the underlying hardware. In modern computer systems,
-either a hypervisor or an operating system (OS) kernel performs this
-important function. Unfortunately, code within an operating system kernel
-may contain flaws and vulnerabilities. If the kernel is 
-attacked by malicious parties, these flaws can provide the attacker
-unrestricted access to the system. One critical flaw, discovered in the
-Linux kernel in the futex subsystem call can allow an attacker to gain ring
-0 control via the futex syscall, and potentially execute arbitrary code
+either a hypervisor \gholami {hypervisor or virtual machine monitor (VMM)?} or an operating system (OS) kernel performs this important function. Unfortunately, code within an operating system kernel
+may contain flaws and vulnerabilities. If the kernel is attacked by malicious parties, these flaws can provide the attacker unrestricted access to the system. One critical flaw, discovered in the Linux kernel in the futex subsystem call can allow an attacker to gain ring 0 control via the futex syscall, and potentially execute arbitrary code
 with kernel mode privileges~\cite{CVE-2014-3153}. \cappos{Possibly omit
 this sentence.}
 
