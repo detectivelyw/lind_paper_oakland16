@@ -2,31 +2,33 @@
 
 Building secure systems that allow untrusted programs to run without
 triggering vulnerabilities in the underlying privileged code of an
-operating system (OS) kernel or hypervisor is very challenging. Despite
+operating system (OS) kernel or hypervisor is very challenging. \yanyan{sentence too long}Despite
 substantial effort by security researchers and system developers to
 eliminate these flaws, exploitable vulnerabilities can still be found.
 Techniques to protect against intentional or unintentional triggering of
 these vulnerabilities, such as system call filtering, operating system
-virtualization, and library OSes have had limited success.  However, there
-are two problems.  First, these systems add trusted code that often has new
+virtualization, and library OSes have had limited success.  The problems
+of these techniques are two-fold.  First, these systems add trusted code that often has new
 exploitable vulnerabilities. Second, the portions of the underlying kernel
 that these systems use may enable the attacker to exploit vulnerabilities.
 As a result, they can not fully prevent buggy programs from triggering
-flaws, or attackers from leveraging these bugs for their own purposes.
+flaws, or attackers from leveraging these bugs. 
+%for their own purposes.
 
 \cappos{Rework...}
-In this paper, we introduce a novel security design approach that leverages
+In this paper, we introduce a novel security design that leverages
 controlled kernel access to protect privileged code from exploitation by
 untrusted programs. We start by analyzing the effectiveness of existing
 solutions and explore the reasons why existing techniques are not
 effective. We then present a new metric to determine where kernel flaws are
-likely to be located, based on the hypothesis that commonly-used kernel
-paths, executed by programs used on a daily basis, contain fewer
-vulnerabilities than less-used paths. Next, use this insight to devise a
-novel design pattern that reimplements essential OS functionality inside a
+likely to be located, based on a hypothesis that commonly-used kernel
+paths, executed by applications on a daily basis, contain fewer
+vulnerabilities than less-used paths. Next, we use this insight to devise a
+novel design that reimplements \yanyan{replace reimplement with 
+something else?} essential OS functionality inside a
 sandbox that only accesses commonly used kernel paths. Lastly, we use this
-design pattern to implement  a prototype security system called Lind. Our
-experimental results show an attacker executing code inside Lind can 
+design to prototype a security system called Lind. Our
+experiment results show that an attacker executing code inside Lind can 
 trigger less than 3\% of zero day kernel attacks, which is about an order of
 magnitude less than existing systems like VirtualBox (40\%), VMWare
 Workstation (31\%), Docker (23\%), and Graphene (23\%).  
