@@ -153,27 +153,19 @@ systems.
 
 \subsection{Verification of Hypothesis}
 
-To verify our hypothesis that commonly used kernel
-paths contain fewer bugs, 
-we first identified these paths as a subset of the total reachable kernel
-paths. These were obtained as follows:
+To verify our hypothesis that commonly used kernel paths contain fewer bugs, 
+we identified these paths as a subset of the total reachable kernel
+paths as follows:
 
 %\begin{enumerate}
-First, common paths were captured by running popular user applications. 
-We ran applications that are commonly used on a daily basis, such as a Web
-browser, file editor, and others. 
-In our experiments, we ran Firefox, Chrome, Gedit, and Claws Mail on Native
-Linux, 
+First, common paths were captured by running popular user applications or open-source libraries. Most notably, these experiments were conducted in data collection phase included running several applications such as two large-scale browsers (Mozilla Firefox and Google Chrome), in addition to running 50 packages among the top 200 popular Debian packages \cite{Top-Packages} in a Linux kernel version 3.13.0.
 \cappos{What version of Linux?}  \cappos{Ali: why these apps?}
-and performed basic file system operations like open a file, close a file,
-make a directory, 
-and delete a directory. We ran the experiments 3-4 hours a day for  5 days
-in a row.  \cappos{This all needs to be much better explained...}
 
-Next, the total reachable paths were captured by system call fuzzing and
-running the Linux kernel test suite. 
-We tried to capture the total reachable paths in the kernel as completely
-as possible. 
+In this step, several other experiments that were required to be completed such as intensive file management tasks to create/read/update or delete files and directories from the underlying (ext3) filesystem during a discrete period of 20 hours over 5 days.
+\cappos{This all needs to be much better explained...}
+
+Next, the total reachable paths were required to be captured by comprehensive system call fuzzing and running the Linux kernel test suite. This experiments helped to capture the total reachable paths in the kernel as completely \gholami {thoroughly?} as possible. 
+
 Two approaches were used to capture this trace.
 
 \begin{itemize}
