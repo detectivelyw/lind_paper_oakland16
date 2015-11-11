@@ -5,10 +5,10 @@ Kernel Security}
 
 In this section, we describe in detail the aforementioned metric to 
 quantitatively evaluate kernel security. We first discuss issues with
-commonly used metrics for code complexity. Then we discuss a metric that
+commonly used metrics for code complexity. Then we present our metric that
 focuses on using kernel code paths used by common applications.  We
-then go on to show how our metric was able to provide a fair comparison of 
-different security systems and their impact on the kernel, 
+then show how our metric is able to provide a fair comparison of 
+different security systems, their impact on the kernel, 
 and to reveal which portions contained fewer bugs.
 
 \subsection{Previous Risk Metrics for Software}
@@ -24,8 +24,8 @@ Researchers have studied and explored different metrics to identify and
 predict bugs in software systems. 
 The number of lines of code has been used as one 
 predictor~\cite{Bug-Location}, as has a file's revision status and 
-whether or not the file previously contained bugs~\cite{lewis2013does,
-Bug-Location}. Studies have also been done based on 
+whether or not the file previously contained bugs~\cite{Bug-Location, 
+lewis2013does}. Studies have also been done based on 
 the number of functions and/or the number of executable lines of code in
 the function~\cite{Mining-Metrics}. 
 While these metrics can be useful in building models to provide a general
@@ -50,7 +50,8 @@ isolating user programs.  \cappos{What are you saying?}
 These methods can mitigate the problem, but the proposed systems will still
 access the kernel the same way as before. 
 They simply move the attack surface from between the user space and the
-kernel, 
+kernel, \yanyan{what's the purpose/consequence of this move? why is this
+move good or bad?}
 to between these new systems and the kernel, but the surface is not
 necessarily reduced. 
 As a result, the proposed solutions do not make the systems more secure. 
@@ -67,11 +68,12 @@ this would mean only exposing the safe portions of the kernel to the user
 space. 
 However, in some cases, risky portions must be exposed to the kernel as
 well. 
-The kernel coverage safety metric, however, can alert us to the potential
-dangers and 
+The kernel coverage safety metric, however, can provide us a guidance 
+about the potential dangers and 
 can help us safely-reimplement those risky kernel interface (or system
 calls) to avoid the potential damage.
-
+%\yanyan{I don't think the new metric alerts us tho. maybe say it provides 
+%as a guidance which parts are risky?}
 
 
 
@@ -89,7 +91,7 @@ such as Web browsers, or file editors, are likely to contain fewer
 exploitable bugs 
 than uncommonly used paths. Our reasoning is that, because they are
 frequently used, 
-bugs and vulnerabilities in these ``common kernel paths,'' as we call them 
+bugs and vulnerabilities in these common kernel paths
 would have most likely been caught by developers. 
 Note that this does more than indicate which system calls should be used. 
 A metric that looks at commonly used kernel paths also excludes odd
@@ -113,52 +115,51 @@ system I/O and memory,
 the kernel code under the corresponding paths is executed. Therefore, 
 its code execution reflects the basic behavior of the kernel, in response
 to user application requests. 
-Our metric first identified and captured what lines of code in the kernel
-are executed 
-when running an user program. We called the resulting captured lines of
-code a kernel trace. 
+Our metric first identified and captured which lines of code in the kernel
+were executed 
+when running an user program. We named the resulting captured lines of
+code a \textit{kernel trace}. 
 A kernel trace is closely related to the program that generated the trace. 
-Therefore, by using the kernel traces, a comparison between different
+By using the kernel traces, a comparison between different
 security systems is possible. 
-To capture the kernel trace, we used gcov \cite{gcov}, a program profiling
-tool, 
-which  is a standard utility with the GNU Compiler Collection (GCC) suite. 
+To capture the kernel trace, we used \texttt{gcov} \cite{gcov}, a program profiling
+tool that is a standard utility with the GNU Compiler Collection (GCC) suite. 
 
 The second step was to evaluate security aspects of the kernel traces that
 we captured. 
 Using the historical kernel vulnerability reports, we collected a list of
 severe kernel bugs from 
 the National Vulnerability Database, the U.S. government repository of
-standards- based 
-vulnerability management data \cite{NVD}. For each bug, we identified the
-lines of code 
+standards-based \yanyan{what does standards-based mean?}
+vulnerability management data \cite{NVD}. We analyzed the bugs as
+follows. For each bug, we identified the lines of code 
 in the kernel that would trigger it. This can be done by examining 
 a patch of the Linux kernel source code to fix the bug. From the patch, 
-we can identify which lines of kernel code need to be modified in order to
-remove the bug. 
+we can identify \textit{which lines of kernel code need to be modified in order to
+remove the bug}. 
 A user program that executes the lines of code changed by a patch to fix a
-kernel bug 
-is considered to have the potential to exploit that flaw.
+kernel bug is considered to have the \textit{potential to exploit that flaw}.
 
 We determined that the lines of code in the kernel would be risky 
-if they trigger one or more kernel vulnerability, and those lines of code 
-that do not are considered to be safe. Using the above kernel trace
+if they triggered one or more kernel vulnerability, and those lines of code 
+that did not are considered to be safe. Using the above kernel trace
 analysis, 
 we empirically labeled the lines of code in the kernel that contain fewer
-bugs as safe lines. 
+bugs as safe lines. \yanyan{according to the definition, safe lines should
+contain no bug, instead of fewer bugs.}
 The safe lines of code would then compose the safe portion of the kernel, 
 which can be trusted to build a secure trusted computing base for secure
 systems.
 
 \subsection{Verification of Hypothesis}
 
-To complete the verification of our hypothesis that commonly used kernel
+To verify our hypothesis that commonly used kernel
 paths contain fewer bugs, 
 we first identified these paths as a subset of the total reachable kernel
 paths. These were obtained as follows:
 
-\begin{enumerate}
-\item Common paths were captured by running popular user applications. 
+%\begin{enumerate}
+First, common paths were captured by running popular user applications. 
 We ran applications that are commonly used on a daily basis, such as a Web
 browser, file editor, and others. 
 In our experiments, we ran Firefox, Chrome, Gedit, and Claws Mail on Native
@@ -169,20 +170,21 @@ make a directory,
 and delete a directory. We ran the experiments 3-4 hours a day for  5 days
 in a row.  \cappos{This all needs to be much better explained...}
 
-\item Total reachable paths were captured by system call fuzzing and
+Next, the total reachable paths were captured by system call fuzzing and
 running the Linux kernel test suite. 
 We tried to capture the total reachable paths in the kernel as completely
 as possible. 
-Two approaches were combined to capture this trace.
+Two approaches were used to capture this trace.
 
 \begin{itemize}
 \item First, our system call fuzzing used the Trinity system call fuzz
 tester \cite{Trinity}, 
 and ran system calls exhaustively with all possible arguments and options. 
 We fuzzed more than 300 available system calls, including file management
-and network system calls, 
-which gave us a thorough kernel trace. In addition, we ran a Linux kernel
-test suite, 
+and network system calls, \yanyan{what is file management?}
+which gave us a thorough kernel trace. 
+
+\item In addition, we ran a Linux kernel test suite, 
 Linux Test Project (LTP) \cite{LTP} to help capture the total reachable
 kernel trace. 
 \cappos{Why did we do this?  Was this to validate our results?  Did it work?
@@ -191,18 +193,18 @@ Linux Test Project is a mature and well maintained tool to test the Linux
 kernel. 
 We ran all the available system call test cases with this tool to capture
 the kernel trace. 
+\end{itemize}
+%\end{enumerate}
+
 Combining the kernel traces generated by Trinity and LTP, we were able to
 access our total reachable kernel paths.
-\end{itemize}
-\end{enumerate}
-
-Based on the above method, we found that 38.5\% of the total reachable
+We found that 38.5\% of the total reachable
 kernel paths are commonly used. 
 More importantly, only 2.5\% of the bugs examined were found in the common
 paths, 
 while 50\% of the bugs were found in the total reachable kernel paths. 
 Our results confirm that common paths contain fewer bugs than uncommon
-paths. 
+paths. \yanyan{I feel this is a bit early to make this conclusion.}
 
 \subsubsection{Coverage Analysis of Common Paths}
 
@@ -214,8 +216,7 @@ The common paths coverage is also significantly smaller than the total
 reachable paths coverage 
 (about 1/3 of the entire kernel).
 
-At first look, it may appear surprising that the total reachable paths
-coverage is not 100\%, 
+It may appear surprising that the total reachable paths coverage is low, 
 and accounts for only about one-third of the entire kernel.  However, 
 this is consistent with kernel code coverage analysis 
 measurements conducted by other researchers \cite{LTP-Coverage}.
@@ -239,6 +240,7 @@ tools and test suite do not reach every possible path in the kernel.
 \begin{table}
 \centering
 \scriptsize
+\caption {Kernel Coverage}
 \begin{tabular}{|l|c|}
   \hline
   \textbf{Kernel Paths} & \textbf{Kernel Coverage (percentage)} \\
@@ -248,7 +250,6 @@ tools and test suite do not reach every possible path in the kernel.
   Total Reachable Paths & 32.2\% \\
   \hline
 \end{tabular}
-\caption {Kernel Coverage}
 \label{table:kernel_coverage}
 \end{table}
 
@@ -258,16 +259,16 @@ show that the common paths are a subset of the
 total reachable paths, 
 shown by the ``OverlappedLines'' in Figure \ref{fig:subset} and Figure
 \ref{fig:key_paths_trace}. 
-We closely examined the kernel trace derived from common paths, 
-and the total reachable paths, and we found that, for each different path
+We closely examined the kernel trace derived from common paths
+and the total reachable paths. We found that for each different path
 in the kernel, the lines of code 
 in the common paths trace also appeared in the total reachable paths trace.
 But there are many lines of code (more than 50\%) 
 in the total reachable paths trace that are not in the common paths. This
 shows that the common paths trace and 
 the total reachable paths we obtained are correct, because common paths in
-the kernel should definitely be reachable. 
-One interesting finding about our results is that the common paths account
+the kernel should definitely be reachable. \yanyan{how to define correct?}
+One further finding is that the common paths account
 for only 38.5\% of the total reachable paths. 
 This suggests that a large portion (61.5\%) of the kernel is not frequently
 used by popular applications on a daily basis.
@@ -290,10 +291,9 @@ Paths}
 \subsubsection{Security Analysis of Kernel Paths\textendash Locating the
 Risky Portions}
 
-The next step in evaluating our hypothesis was to check which portions of
+To verify our hypothesis, we next checked which portions of
 the kernel contained kernel bugs. We examined 40 severe Linux kernel
-bugs, 
-ones which had been discovered by the research community in the last five
+bugs that had been discovered by the research community in the last five
 years (the first two columns in Table 
 \ref{table:vulnerabilities_commonly_used_kernel_paths}). 
 We used these kernel bugs to check if vulnerabilities existed in certain
