@@ -12,8 +12,9 @@ are reimplemented by our own code within a sandbox.
 Therefore, any bugs or failures within the implementation of those complex system functions 
 will be contained by the sandbox, and will not have the chance to reach 
 and trigger risky portions of the kernel. Thus, we call it a ``safe-reimplementation'' design.
+\yanyan{this definition should appear early in the paper.}
 
-\begin{figure}[h]
+\begin{figure}%[h]
 \centering
 \includegraphics[width=1.0\columnwidth]{diagram/lind_secure_design.png}
 \caption{The Idealized ``Safe-Reimplementation'' Design \cappos{This figure
@@ -26,17 +27,17 @@ outside parts.}}
 \subsection{Architecture}
 
 To execute untrusted applications in a safe manner that will not trigger bugs 
-in the underlying OS kernel and cause damage to other parts of the system, 
-our design intent is to build a sandbox system that can provide isolation and 
+in the underlying OS kernel, %and cause damage to other parts of the system, 
+we must build a sandbox system that can provide isolation and 
 containment for any improper operations in the programs. 
 One approach to building such a system is to place it entirely in the user space, 
 and to only have a small sandbox kernel with restricted access to the OS kernel (Figure \ref{fig:design}). 
 This approach has advantages over other approaches that require modifications to 
-the OS kernel, because it avoids the risk of threat escalation. If modified modules 
+the OS kernel, as it avoids the risk of threat escalation. If modified modules 
 are inside the OS kernel, they have kernel privileges that could allow attacks on the underlying OS, 
 as well as applications run on top of it. 
 
-There are two main components in our design of a secure sandbox system (Figure \ref{fig:design}). 
+There are two main components in our design of a secure sandbox system, as shown in Figure \ref{fig:design}. 
 The first is a computation module, which performs functions like type checking, object creation, 
 and garbage collection. The second is a system API that serves requests to access the OS kernel. 
 Those two components should work together to complete the requirements of running user code. 
@@ -56,11 +57,12 @@ without triggering OS kernel bugs is left to the system API module.
 \subsubsection{The System API Module}
 
 The system API module is the core of our sandbox system. It is comprised of two parts, 
-a system API safe reimplementation, and the sandbox kernel. 
+a sandbox kernel that provides access to basic but critical system calls, and a system 
+API safe reimplementation that implements more complex calls. 
 
 The sandbox kernel forms the only addition to the TCB of our system.  We 
-make this system extremely small and simple so that it is easy to security
-verify.  The purpose of the code is simply to provide an API that performs
+make this system extremely small and simple so that it is easy to verify its 
+security.  The purpose of the sandbox code is simply to provide an API that performs
 a few critical system calls with the most basic parameters.  For example,
 programs will need some mechanism to write data to the file system
 and communicate with the network.  The kernel's goal is to provide the ability
@@ -79,8 +81,8 @@ read in.
 %Furthermore, the set of arguments used for each call is also highly restricted. 
 
 The system API safe reimplementation is a set of more complicated system calls 
-that are constructed from our sandbox kernel. it should include reconstruction of 
-complex system functions like many in the file system API. 
+that are constructed from our sandbox kernel. It should be able to reconstruct 
+complex system functions, like those complex calls in the file system API. 
 We reimplemented those system calls because we did not want user code 
 to have direct access to the underlying OS kernel. 
 Therefore, our reimplementation layer serves as a mediator between the user code 
@@ -95,7 +97,7 @@ Here is an example of how this reimplementation would work with the symbolic lin
 anyways.}  \cappos{Does a diagram showing the different design philosophies and
 where they put functionality make sense?}
 If there is a bug in this function, our safe reimplementation will not rely on the kernel code paths for symbolic links. 
-Instead, our sandbox system will implement the (incorrect) buggy behavior, but do so within the sandbox. 
+Instead, our sandbox system will implement the (incorrect) buggy behavior, \yanyan{why implement the buggy behavior?} but do so within the sandbox. 
 Since the reimplementation code does not have privileged access to the system as the OS kernel does, 
 this will not result in a security issue. The usual outcome of a bug in this case is simply that the application will fail.
 
@@ -104,5 +106,5 @@ It is important to note that our design does not rely on any specific technique 
 To implement the computation module and the system API module in our design, 
 it is possible to choose from several different techniques that fit well with the users' specific needs or requirements.
 
-This general system design was implemented as a prototype secure system called Lind. 
+This general system design was implemented as a prototype called Lind. 
 In the next section, we provide a detailed description of Lind.
