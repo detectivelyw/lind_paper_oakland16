@@ -2,13 +2,12 @@
 \label{sec.limitation}
 
 
-While these early results are promising, it should be noted that there were
-a few limitations on the scope of the study that may need to be addressed
-in future studies. First of all, our metric relies on identifying lines of
+First of all, our metric relies on identifying lines of
 code in the kernel that are executed when running applications in security
-systems. This would be difficult to utitlize in systems that modify the
-kernel in substantial ways, for example in virtualization systems that
-utilize a hypervisor.
+systems. In our future work we will explore if the bug metric works well for
+operating system virtual machines with a hypervisor.  It is not clear if
+existing hypervisors are so small and compact that effectively all paths
+are common paths or whether there is still substantial benefit from our metric.
 
 A second issue is that our criteria for determining if a kernel trace is
 safe or risky was to  check it against a list of historical kernel bugs.
@@ -21,20 +20,23 @@ metric will not be able to accurately determine whether or not those bugs
 have been triggered. In such cases, more complex metrics might be needed
 for detection.  
 
-Lastly, while Lind executes programs like Apache and Tor, it does not
-support every system call or every possible set of arguments. For example,
-symbolic links are not supported.  While the SafePOSIX implementation could
-be extended to do so, we leave this for future work. Also, as mentioned in
-the previous section, Lind has not been optimized for performance, so the
+%While Lind executes programs like Apache and Tor, it does not
+%support every system call or every possible set of arguments. For example,
+%symbolic links are not supported.  While the SafePOSIX implementation could
+%be extended to do so, we leave this for future work. Also, as mentioned in
+%the previous section, 
+Lind has not been optimized for performance, so the
 results we present here should be taken as a baseline of what is possible. 
+We would like to explore what existing OSVM optimizations can safely
+be applied and what their impact is.
 
-There were also some avenues we intentionally excluded in this initial
-study that could form the basis for interesting research projects in the
-future. First, we chose not to explore bugs within the applications
-themselves. 
-\cappos{move to motivation / threat model.}
+%There were also some avenues we intentionally excluded in this initial
+%study that could form the basis for interesting research projects in the
+%future. First, we chose not to explore bugs within the applications
+%themselves. 
+%\cappos{move to motivation / threat model.}
 
-Other future investigations could center on the use of our metric in other
+We would also like to test our metric in other
 popular operating systems, such as Windows and Mac OS. Our experiments were
 limited to Linux kernel 3.14.1 and some of the typical virtualization
 systems that existed in Linux. It would be interesting and potentially
