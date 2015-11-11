@@ -10,11 +10,7 @@ this sentence.}
 
 There is a diverse set of defensive technologies to protect kernels from 
 attacks, including OS virtualization, system call filtering, and library OSes,
-and so on \gholami {remove "and so on"?}. Common security wisdom is that by running software in a virtual machine, one can prevent the attacker from exploiting flaws in the
-underlying kernel.  However, as we will show later, virtualization
-cannot prevent about one third of vulnerabilities on the Linux kernel.  As
-such, even with these technologies in place, applications running in a
-virtual machine still pose a substantial risk.
+and so on \gholami {remove "and so on"?}. Common security wisdom is that by running software in a virtual machine, one can prevent the attacker from exploiting flaws in the underlying kernel.  However,\gholami{... security of virtualization itself is a challenging issue \cite{Tal} and ...} as we will show later, virtualization cannot prevent about one third of vulnerabilities on the Linux kernel. As such, even with these technologies in place, applications running in a virtual machine still pose a substantial risk.
 
 In this paper, we begin by developing a metric that helps identify where
 within the kernel these vulnerabilities are likely to be located. We
