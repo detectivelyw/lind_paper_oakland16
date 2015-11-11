@@ -4,10 +4,16 @@
 Based on the design introduced in Section \S{\ref{sec.design}}, 
 we implemented a secure sandbox system, Lind, 
 for running untrusted user programs on vulnerable OS kernels. 
-Lind adapts two basic  technologies as its building blocks\textendash Google's Native Client, and Seattle's Repy. 
-As described in \S{\ref{sec.design}} (Figure \ref{fig:design}), our design has  two main components\textendash a computation module 
-and a system API module. Google's Native Client served as the computation module 
+Lind adapts two basic technologies as its building blocks\textendash 
+Google's Native Client, and Seattle's Repy. 
+As described in \S{\ref{sec.design}} (Figure \ref{fig:design}), our design has
+two main components\textendash a computation module that isolates the 
+application and a system API provided by a sandbox that isolates the complex 
+portions of POSIX.
+Google's Native Client served as the computation 
+module 
 and Seattle's Repy as the system API module (Figure \ref{fig:architecture}).
+\cappos{What is this saying?  It is repetitive...}
 
 \begin{figure}[h]
 \centering
@@ -17,28 +23,51 @@ and Seattle's Repy as the system API module (Figure \ref{fig:architecture}).
 \end{figure}
 
 \subsection{The Computation Module of Lind: Google's Native Client}
-We use Google's Native Client (NaCl) \cite{NaCl-09} as our computation module 
-because it provides an environment for efficient execution of legacy code in the form of x86 and ARM binaries. 
-NaCl can perform the functions required by the computation module well, and it is easy to 
-connect with our system API module because NaCl uses glibc to perform system calls. 
-Modification to NaCl's glibc would allow us to redirect those system call requests to our own system API module. 
+We use Google's Native Client (NaCl)~\cite{NaCl-09} to isolate the computation
+of the user application.  NaCl is a widely used environment for efficient 
+execution of legacy code in the form of x86 and ARM binaries, which allows
+Lind to work on most types of legacy code.   Programs are compiled with
+the NaCl compiler which produces a binary with software fault isolation.
+This prevents the majority of the application from performing system calls 
+or executing arbitrary instructions. 
 
-NaCl is a sandbox used to execute untrusted x86 native code. 
-It aims to give applications the computational performance of native applications without compromising safety. 
-NaCl uses software fault isolation and a secure runtime to direct system interaction and 
-side effects through interfaces managed by the program. It provides operating system portability 
-for binary code while supporting performance-oriented features, such as thread support, 
-instruction set extensions, such as SSE, and use of compiler intrinsics and a hand-coded assembler. 
-It also allows the efficient execution of legacy code in the form of x86 and ARM binaries 
-that are built with a lightly modified compiler tool chain. 
+To perform a system call, the application will call into a small privileged
+part of the process that is part of the NaCl TCB which forwards system calls.
+ In NaCl, these calls are usually either passed to the OS or to Chrome for 
+processing \cappos{Check}.  To build Lind, we changed the NaCl TCP to 
+instead forward these calls to the SafePOSIX implementation
+for processing.  The NaCl glibc module contained stubs that rejected operations
+that Chrome would not handle.  We added functionality to NaCl's glibc so that
+those calls were forwarded into SafePOSIX for processing.
+\cappos{Need to compare NaCl execution w/ Chrome possibly
+with fuzzing to others in the eval}  
+
+
+%NaCl can perform the functions required by the computation module well, and it is easy to 
+%connect with our system API module because NaCl uses glibc to perform system calls. 
+%Modification to NaCl's glibc would allow us to redirect those system call requests to our own system API module. 
+%
+%NaCl is a sandbox used to execute untrusted x86 native code. 
+%It aims to give applications the computational performance of native applications without compromising safety. 
+%NaCl uses software fault isolation and a secure runtime to direct system interaction and 
+%side effects through interfaces managed by the program. It provides operating system portability 
+%for binary code while supporting performance-oriented features, such as thread support, 
+%instruction set extensions, such as SSE, and use of compiler intrinsics and a hand-coded assembler. 
+%It also allows the efficient execution of legacy code in the form of x86 and ARM binaries 
+%that are built with a lightly modified compiler tool chain. 
 
 \subsection{The System API Module of Lind: Seattle's Repy}
 
-Seattle's Repy \cite{Repy-10} is a restricted subset of Python, that works as a sandbox to provide a safer environment 
-to run applications. For Lind, we used Repy to build our system API module. 
-To be more specific, our system API module has a very small sandbox kernel as TCB,  
-written with Python. On top of the sandbox kernel, 
-we use Repy code to safely reimplement complex system functions.
+To build an API to access the safe parts of the underlying kernel, we need 
+two things.  First, we need a restricted sandbox that isolates computation
+and only allows access to commonly used kernel paths.  We used 
+Seattle's Repy~\cite{Repy-10} sandbox to perform this task.
+Second, we need to build a POSIX implementation that runs within that sandbox.  
+
+%pplications. For Lind, we used Repy to build our system API module. 
+%To be more specific, our system API module has a very small sandbox kernel 
+%as TCB,  written with Python. On top of the sandbox kernel, 
+%we use Repy code to safely reimplement complex system functions.
 
 \subsubsection{The Repy Sandbox Kernel}
 
@@ -55,84 +84,162 @@ regularly used system calls that access the commonly used kernel paths.
 \begin{table}
 \centering
 \scriptsize
-\begin{tabular}{|c|l|}
+%\begin{tabular}{|c|l|}
+  %\hline
+  %\textbf{Network Functions} & \textbf{API Function Name} \\
+  %\hline
+  %01 & gethostbyname(name) \\
+  %\hline
+  %02 & getmyip() \\
+  %\hline
+  %03 & sendmessage(destip, destport, message, localip, localport) \\
+  %\hline
+  %04 & openconnection(destip, destport, localip, localport, timeout) \\
+  %\hline
+  %05 & socket.close() \\
+  %\hline
+  %06 & socket.recv(numbytes) \\
+  %\hline
+  %07 & socket.send(message) \\
+  %\hline
+  %08 & listenforconnection(localip, localport) \\
+  %\hline
+  %09 & tcpserversocket.getconnection() \\
+  %\hline
+  %10 & tcpserversocket.close()\\
+  %\hline
+  %11 & listenformessage(localip, localport) \\
+  %\hline
+  %12 & udpserversocket.getmessage() \\
+  %\hline
+  %13 & udpserversocket.close() \\
+  %\hline \hline
+  %\textbf{File Functions} & \textbf{API Function Name} \\
+  %\hline
+  %01 & openfile(filename, create) \\
+  %\hline
+  %02 & file.close() \\
+  %\hline
+  %03 & file.readat(sizelimit, offset) \\
+  %\hline
+  %04 & file.writeat(data, offset) \\
+  %\hline
+  %05 & listfiles() \\
+  %\hline
+  %06 & removefile(filename) \\
+  %\hline \hline
+  %\textbf{Threading Functions} & \textbf{API Function Name} \\
+  %\hline
+  %01 & createlock() \\
+  %\hline
+  %02 & lock.acquire(blocking) \\
+  %\hline
+  %03 & lock.release() \\
+  %\hline
+  %04 & createthread(function) \\
+  %\hline
+  %05 & sleep(seconds) \\
+  %\hline
+  %06 & getthreadname() \\
+  %\hline \hline
+  %\textbf{Miscellaneous Functions} & \textbf{API Function Name} \\
+  %\hline
+  %01 & log(*args) \\
+  %\hline
+  %02 & getruntime() \\
+  %\hline
+  %03 & randombytes() \\
+  %\hline
+  %04 & exitall() \\
+  %\hline
+  %05 & createvirtualnamespace(code, name) \\
+  %\hline
+  %06 & virtualnamespace.evaluate(context) \\
+  %\hline
+  %07 & getresources() \\
+  %\hline
+  %08 & getlasterror() \\
+  %\hline
+%\end{tabular}
+\begin{tabular}{|l|}
   \hline
-  \textbf{Network Functions} & \textbf{API Function Name} \\
+  \textbf{Network Functions} \\
   \hline
-  01 & gethostbyname(name) \\
+  gethostbyname(name) \\
   \hline
-  02 & getmyip() \\
+  getmyip() \\
   \hline
-  03 & sendmessage(destip, destport, message, localip, localport) \\
+  openconnection(destip, destport, localip, localport, timeout) \\
   \hline
-  04 & openconnection(destip, destport, localip, localport, timeout) \\
+  socket.close() \\
   \hline
-  05 & socket.close() \\
+  socket.recv(numbytes) \\
   \hline
-  06 & socket.recv(numbytes) \\
+  socket.send(message) \\
   \hline
-  07 & socket.send(message) \\
+  listenforconnection(localip, localport) \\
   \hline
-  08 & listenforconnection(localip, localport) \\
+  tcpserversocket.getconnection() \\
   \hline
-  09 & tcpserversocket.getconnection() \\
+  tcpserversocket.close()\\
   \hline
-  10 & tcpserversocket.close()\\
+  sendmessage(destip, destport, message, localip, localport) \\
   \hline
-  11 & listenformessage(localip, localport) \\
+  listenformessage(localip, localport) \\
   \hline
-  12 & udpserversocket.getmessage() \\
+  udpserversocket.getmessage() \\
   \hline
-  13 & udpserversocket.close() \\
+  udpserversocket.close() \\
   \hline \hline
-  \textbf{File Functions} & \textbf{API Function Name} \\
+  \textbf{File Functions} \\
   \hline
-  01 & openfile(filename, create) \\
+  openfile(filename, create) \\
   \hline
-  02 & file.close() \\
+  file.close() \\
   \hline
-  03 & file.readat(sizelimit, offset) \\
+  file.readat(sizelimit, offset) \\
   \hline
-  04 & file.writeat(data, offset) \\
+  file.writeat(data, offset) \\
   \hline
-  05 & listfiles() \\
+  listfiles() \\
   \hline
-  06 & removefile(filename) \\
+  removefile(filename) \\
   \hline \hline
-  \textbf{Threading Functions} & \textbf{API Function Name} \\
+  \textbf{Threading Functions} \\
   \hline
-  01 & createlock() \\
+  createlock() \\
   \hline
-  02 & lock.acquire(blocking) \\
+  lock.acquire(blocking) \\
   \hline
-  03 & lock.release() \\
+  lock.release() \\
   \hline
-  04 & createthread(function) \\
+  createthread(function) \\
   \hline
-  05 & sleep(seconds) \\
+  sleep(seconds) \\
   \hline
-  06 & getthreadname() \\
+  getthreadname() \\
   \hline \hline
-  \textbf{Miscellaneous Functions} & \textbf{API Function Name} \\
+  \textbf{Miscellaneous Functions} \\
   \hline
-  01 & log(*args) \\
+  getruntime() \\
   \hline
-  02 & getruntime() \\
+  randombytes() \\
   \hline
-  03 & randombytes() \\
+  log(*args) \\
   \hline
-  04 & exitall() \\
+  exitall() \\
   \hline
-  05 & createvirtualnamespace(code, name) \\
+  createvirtualnamespace(code, name) \\
   \hline
-  06 & virtualnamespace.evaluate(context) \\
+  virtualnamespace.evaluate(context) \\
   \hline
-  07 & getresources() \\
+  getresources() \\
   \hline
-  08 & getlasterror() \\
+  getlasterror() \\
   \hline
 \end{tabular}
-\caption {System Functions in the Repy Sandbox Kernel}
+\caption {System Functions in the Repy Sandbox Kernel.  \cappos{Need to
+clearly explain the takeaway.}}
 \label{table:RepyKernel}
 \end{table}
 
@@ -187,10 +294,12 @@ Finally, Lind is lightweight. Because the sandbox only incurs overhead when ther
 overall overhead for Lind is low. Lind uses a native interface for execution, 
 allowing CPU-and-memory-intensive applications to run at speeds that are equivalent to NaCl and near native speed. 
 
+\cappos{Does this fit better in a discussion section?  Why is it in the
+implementation?}
 \subsection{The Benefits of the Two Sandbox System}
 
 In reviewing the design of Lind, some fundamental questions could be raised about the dual sandbox design. 
-Why is one not enough? And, if two is good, why not use more? 
+Why is one not enough? And, if two is good, why not use three or more? 
 The answer to the first question is that the kernel interface is extremely rich and hard to protect. 
 In order to have minimal impact on the kernel, as well as provide sufficient API for legacy applications, 
 we need to have one sandbox focuses on protecting the kernel and providing POSIX API, 
