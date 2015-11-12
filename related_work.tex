@@ -38,8 +38,7 @@ and reconstructs most OS functions with our own safe Repy code.
 
 \subsection{System Call Interposition}
 
-System call interposition offers a number of properties that make it attractive for building sandboxes, 
-though it can be error prone \cite{SCI-04}. Approaches for delegation and filtering have been extensively studied, 
+System call interposition offers a number of properties that make it attractive for building sandboxes, though it can be error prone \cite{SCI-04}. Approaches for delegation and filtering have been extensively studied, 
 along with their respective tradeoffs between security and performance. 
 Janus Version 2 (J2) \cite{Janus0:96, Janus:99} uses filtering and sandboxing, while Ostia \cite{SCI-04} uses a delegation. 
 Ostia also provides a hybrid interposition architecture, which allows for kernel level enforcement and user policies. 
@@ -53,16 +52,18 @@ The concepts behind System Call Interposition have evolved into other modern tec
 and has benefitted many security systems, including Lind. 
 
 \subsection{Software Fault Isolation}
-Software Fault Isolation (SFI) is a sandboxing technique in which native instructions can only be executed 
-if they do not violate the sandbox's constraints \cite{SFI:93}. Instructions usually exclude any directions that 
-could jump outside the program's predefined memory region or execute a system call. 
-Programs must use a specific compiler, which enforces these constraints before the programs are validated on load. 
+Software Fault Isolation (SFI) is a sandboxing technique in which native instructions can only be executed if they do not violate the sandbox's constraints \cite{SFI:93}. Instructions usually exclude any directions that could jump outside the program's predefined memory region or execute a system call.
+ 
+Programs must use a specific compiler, which enforces these constraints before the programs are validated on load.
+
 Nooks \cite{Nooks:03} isolates Linux kernel modules, so that if they crash, the whole kernel does not crash as well. 
 They use two techniques: sandboxing and micro-reboots. Nooks uses both as SFI-based and user-level sandboxes. 
+
 Micros-reboots conceptually refresh small parts of the system. 
 Google's Native Client \cite{NaCl-09} adopts SFI to execute untrusted x86 binary code safely. 
+
 We leveraged this technique and used NaCl in our system Lind. The difference is that SFI doesn't handle the manner 
-in which systems interact with the underlying OS. In NaCl, to perform system calls, 
-it relies on a trusted service runtime for thread creation, memory management, and other system services. 
+in which systems interact with the underlying OS. In NaCl, to perform system calls, it relies on a trusted service runtime for thread creation, memory management, and other system services. 
+
 In Lind, we redirect system call requests to our safe POSIX interface, 
 which allows Lind to control its own interaction with the underlying OS kernel.
