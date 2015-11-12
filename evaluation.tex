@@ -171,7 +171,15 @@ Furthermore, symbolic links in those systems will be contained within the virtua
 and will not be able to reach the underlying OS. In this case, those virtualization systems provide enough 
 isolation to prevent this bug from happening. 
 
-\item
+\item CVE-2014-8086. This vulnerability was not triggered inside Graphene and Lind, but was triggered inside 
+VirtualBox, VMWare workstation, Docker, and Native Linux. It resides in the \texttt{sf/ext4/file.c} kernel path. 
+This bug can be triggered via making a file system write function call, together with \texttt{fcntl} function call 
+with argument \texttt{F\_SETFL}, and \texttt{O\_DIRECT} flag. If triggered, it could allow attackers to cause 
+a denial of service (file unavailability). In Lind, complex file system function like \texttt{fcntl}, and complicated 
+file flags like \texttt{O\_DIRECT} are not allowed. Graphene also has a controlled ABI and certain degree of 
+system call restriction which does not allow \texttt{fcntl} function with \texttt{O\_DIRECT} flag. 
+Thus they both avoided this bug. Other systems like VirtualBox, VMWare Workstation, Docker, and Native Linux, 
+all suffer from this vulnerability, due to a design philosophy that has relaxed control over the kernel access. 
 
 \end{itemize}
 
