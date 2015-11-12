@@ -159,7 +159,17 @@ to trigger this vulnerability. Similarly, in other virtualization systems we tes
 Linux, \texttt{mmap()} is a building block, directly used by every system. Therefore, this vulnerability was 
 triggered in every system. 
 
-\item
+\item CVE-2014-5045. This vulnerability was only triggered inside Native Linux. It resides in the 
+\texttt{fs/namei.c} kernel path. It is caused because 
+\texttt{mountpoint\_last(struct nameidata *nd, struct path *path)} function does not properly 
+maintain a reference count during attempts to use the \texttt{umount} system call 
+, in conjunction with a symbolic link. Unmount on symbolic link could block another unmount operation, 
+and allow attackers to cause a denial of service or deploy use-after-free exploitation. 
+Lind does not provide and allow symbolic link, so it does not suffer from this vulnerability. 
+Other virtualization systems have their own metadata to maintain their file directories and symbolic links. 
+Furthermore, symbolic links in those systems will be contained within the virtualization system's image, 
+and will not be able to reach the underlying OS. In this case, those virtualization systems provide enough 
+isolation to prevent this bug from happening. 
 
 \item
 
