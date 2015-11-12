@@ -60,12 +60,22 @@ Software Fault Isolation (SFI) is an alternative to hardware memory protection f
 To enforce the safety constraints, programs demand a specific compiler in advance to validation and loading the programs. For example, in \cite{Castro-BGI} authors introduced a SFI system called Byte Granularity Isolation (BGI) as a runtime tool to isolate drivers in separate protection SFI domains, while sharing the same address space between different domains. BGI mainly ensures write-integrity, control-flow integrity and type safety for kernel objects. For this purpose, a BGI compiler is required to transform the unmodified driver source code to instrumented driver. The instrumented driver will be linked to the BGI interposition libraries that enforce the protection constraints to produce the BGI drivers. The protection constraints that are enforced by the interposition library are implemented in access control lists (ACL). The ACLs contain policies for each byte of virtual memory and domain permissions. A major issue of BGI is that it does not solve the vulnerabilities in kernel-level and it only deals with specific attacks that aim to pass by a faulty domain.
 
 
-Nooks \cite{Nooks:03} is another SFI-based solution that isolates kernel modules and device derives mainly for reliability and fault-resistance. For example, protecting the OS from crashes due to malicious attacks. Nook isloates drivers based on the need for low-latency using SFI or high-throughput through VM protection. 
+Nooks \cite{Nooks:03} is another SFI-based solution that provides protected environment for running device drivers by isolating kernel modules and device derives mainly for reliability and fault-resistance. Nooks runtime environment is located within the kernel and it includes majority of drivers that needs to be protected from each other, i.e. network nook and video nook are two protection domains without the possibility for memory writes outside their protection domain. The Nook layer function as a reference monitor between device devices and physical hardware by forwarding interrupts  Nooks also wrap calls from the operating system kernel into device drivers and from device drivers into the kernel, allowing the operating system to track resource usage and verify data that is passed into and out of the kernel. Object tracking to allow OS for resource consumption is another feature of wrappers in Nooks. 
 
-Google's Native Client \cite{NaCl-09} adopts SFI to execute untrusted x86 binary code safely. 
 
-We leveraged this technique and used NaCl in our system Lind. The difference is that SFI doesn't handle the manner 
-in which systems interact with the underlying OS. In NaCl, to perform system calls, it relies on a trusted service runtime for thread creation, memory management, and other system services. 
+Google's Native Client \cite{NaCl-09} adopts SFI to execute untrusted x86 binary code safely. The difference is that SFI doesn't handle the manner in which systems interact with the underlying OS. In NaCl, to perform system calls, it relies on a trusted service runtime for thread creation, memory management, and other system services. 
 
-In Lind, we redirect system call requests to our safe POSIX interface, 
-which allows Lind to control its own interaction with the underlying OS kernel.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
