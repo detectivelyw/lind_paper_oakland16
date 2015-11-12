@@ -4,15 +4,15 @@
 In this section, we present some background information 
 relevant to the development of our design metric and the Lind prototype. 
 This includes a broader discussion of the problem of kernel exploitation, 
-and the limitations of previous protection strategies caused by 
-an inability to identify which portions of the kernel are risky. 
-Lastly, we share a few assumptions about the specific threats 
+and the limitations of previous protection strategies. 
+%caused by an inability to identify which portions of the kernel are risky. 
+We also share a few assumptions about the specific threats 
 that the safety metric and the Lind prototype system are designed to
 address.
 
 \subsection{Kernel and Vulnerabilities}
 
-Running user applications inevitably relies on the operating system kernel 
+Running user applications relies on the operating system kernel 
 accessing critical resources, such as memory, I/O, or CPU. 
 The kernel provides an interface to serve these requests 
 and provides essential functionality for all applications running in the
@@ -53,12 +53,12 @@ sensitive information from kernel stack memory~\cite{CVE-2010-4073}.
 Attackers have also used use-after-free vulnerability to gain kernel
 privileges~\cite{CVE-2013-4343}.
 
-The number of kernel vulnerabilities and their potential for exploitation, 
-plus the fact that user applications rely on the kernel to execute
-programs, 
-present a compelling motive for designing securer systems that can run
-applications with a better degree of safety. \yanyan{this paragraph does 
-not say anything new.}
+%The number of kernel vulnerabilities and their potential for exploitation, 
+%plus the fact that user applications rely on the kernel to execute
+%programs, 
+%present a compelling motive for designing securer systems that can run
+%applications with a better degree of safety. \yanyan{this paragraph does 
+%not say anything new.}
 
 \subsection{Threat Assumptions}
 
@@ -70,7 +70,7 @@ Threats occur when applications obtain access to privileges that were not
 intentionally granted by the system, 
 thus losing the intended protection~\cite{Repy-10}. In building a system
 that leverages our security metric, 
-we make the following assumptions about the threat we seek to address.
+we make the following assumptions about the threat we seek to address:
 
 \begin{enumerate}
 \item We assume that the operating system kernel contains one or more bugs 
