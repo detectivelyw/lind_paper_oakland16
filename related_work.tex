@@ -60,13 +60,8 @@ Software Fault Isolation (SFI) is an alternative to hardware memory protection f
 To enforce the safety constraints, programs demand a specific compiler in advance to validation and loading the programs. For example, in \cite{Castro-BGI} authors introduced a SFI system called Byte Granularity Isolation (BGI) as a runtime tool to isolate drivers in separate protection SFI domains, while sharing the same address space between different domains. BGI mainly ensures write-integrity, control-flow integrity and type safety for kernel objects. For this purpose, a BGI compiler is required to transform the unmodified driver source code to instrumented driver. The instrumented driver will be linked to the BGI interposition libraries that enforce the protection constraints to produce the BGI drivers. The protection constraints that are enforced by the interposition library are implemented in access control lists (ACL). The ACLs contain policies for each byte of virtual memory and domain permissions. A major issue of BGI is that it does not solve the vulnerabilities in kernel-level and it only deals with specific attacks that aim to pass by a faulty domain.
 
 
-Nooks \cite{Nooks:03} is another SFI-based solution that isolates kernel modules and device derives.
+Nooks \cite{Nooks:03} is another SFI-based solution that isolates kernel modules and device derives mainly for reliability and fault-resistance. For example, protecting the OS from crashes due to malicious attacks. Nook isloates drivers based on the need for low-latency using SFI or high-throughput through VM protection. 
 
-
- 
-They use two techniques: sandboxing and micro-reboots. Nooks uses both as SFI-based and user-level sandboxes. 
-
-Micros-reboots conceptually refresh small parts of the system. 
 Google's Native Client \cite{NaCl-09} adopts SFI to execute untrusted x86 binary code safely. 
 
 We leveraged this technique and used NaCl in our system Lind. The difference is that SFI doesn't handle the manner 
