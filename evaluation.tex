@@ -146,7 +146,18 @@ pass through to the underlying OS kernel. In this case, the \texttt{O\_TMPFILE} 
 allowed in Native Linux, VirtualBox, VMWare Workstation, Docker, and Graphene. Therefore, 
 those systems suffer from the risk of this vulnerability.
 
-\item
+\item CVE-2014-4171. This is the only vulnerability in our test that was triggered in every 
+system, including Lind. It resides inside the \texttt{mm/shmem.c} kernel path. This bug can 
+be triggered by using \texttt{mmap()} system call to access a hole in the memory. 
+The \texttt{mmap()} call then invokes \texttt{shmem\_fault()}, which will cause contention 
+on \texttt{i\_mmap\_mutex}, and lead into serious starvation.  
+The reason that Lind also triggered this bug is because \texttt{mmap()} cannot easily 
+be safely reimplemented inside our POSIX reimplementation. \texttt{mmap()} function is considered 
+as one of the building blocks that a system must have access to memory resources. 
+In Lind, we allow \texttt{mmap()} calls to directly access the kernel, which opens the chance 
+to trigger this vulnerability. Similarly, in other virtualization systems we tested, as well as the Native 
+Linux, \texttt{mmap()} is a building block, directly used by every system. Therefore, this vulnerability was 
+triggered in every system. 
 
 \item
 
