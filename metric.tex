@@ -20,8 +20,30 @@ privileged code.   \cappos{Is this really true?  No one has ever proposed
 a metric?  We do need to do a more detailed analysis of this.  I would vote
 to remove this sentence regardless...}
 
-Researchers have studied and explored different metrics to identify and
-predict bugs in software systems. 
+
+Structurally, the Linux kernel is divided into several main sub-directories:
+\texttt{kernel} (main kernel), \texttt{ipc} (inter-process communication), 
+\texttt{net} (networking), \texttt{fs} (file system), \texttt{drivers} (device drivers), 
+etc. Chou showed in~\cite{chou2001empirical} that function's directory, e.g., 
+\texttt{drivers}, reults in certain parts of the Linux kernel have error rates much 
+higher than the rest of the kernel; kernel source code size and age also affects
+how frequently errors occur in the kernel.
+%largest/newest quartile of functions in kernel have error rates 
+%several orders of magnitude higher than the smallest/oldest quartile. 
+Years later, Palix found that \texttt{drivers} still contains the most faults in 
+the Linux kernel, in addition to HAL and \texttt{fs}~\cite{palix2011faults}. 
+On the other hand, Engler analyzed system code by inferring programmer 
+beliefs~\cite{engler2001bugs}. This is achieved by static analysis
+of source code that looks for contradictions, such as acquired locks are 
+not released. There has also been work that generates vulnerability 
+signatures~\cite{brumley2006towards}, which match all exploits
+of a given vulnerability. Most of such work is based on a mix of static and
+dynamic analysis, constraint solving and symbolic execution~\cite{chou2003static}.
+However, most of these findings have not yet been used to design 
+secure systems. 
+
+Researchers in software engineering have also studied and explored 
+different metrics to identify and predict bugs in software systems. 
 The number of lines of code has been used as one 
 predictor~\cite{Bug-Location}, as has a file's revision status and 
 whether or not the file previously contained bugs~\cite{Bug-Location, 
