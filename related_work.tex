@@ -62,10 +62,9 @@ To enforce the safety constraints, programs demand a specific compiler in advanc
 
 Nooks \cite{Nooks:03} is another SFI-based solution that provides protected environment for running device drivers by isolating kernel modules and device derives mainly for reliability and fault-resistance. Nooks runtime environment is located within the kernel and it includes majority of drivers that needs to be protected from each other, i.e. network nook and video nook are two protection domains without the possibility for memory writes outside their protection domain. The Nook layer function as a reference monitor between device devices and physical hardware by forwarding interrupts  Nooks also wrap calls from the operating system kernel into device drivers and from device drivers into the kernel, allowing the operating system to track resource usage and verify data that is passed into and out of the kernel. Object tracking to allow OS for resource consumption is another feature of wrappers in Nooks. 
 
+Recently, Google provided Native Client (NaCl) \cite{NaCl-09} for Chrome browser to allow native executable code to be run directly in a browser using the SFI semantics. NaCl prevents suspicious codes for memory corruption or direct access to the underlying system resources. For this purpose NaCl loads untrusted modules from the trusted modules into two different address spaces, where in most SFI approaches both untrusted and trusted codes are loaded into a common address space. 
 
-Recently, Google provided Native Client (NaCl) \cite{NaCl-09} for Chrome browser to allow native executable code to be run directly in a browser using the SFI semantics. NaCl prevents suspicious codes for memory corruption or direct access to the underlying system resources.
-
-
+In another effort \cite{PSFI}, Kroll et al. discuss issues of machine-level SFI that causes portability limitations across different hardware architectures. The authors propose portable SFI through a higher level of abstraction at the compiler layer. To this end, programs are rewritten by an intermediate-level language compiler to comply with policies.
 
 
 
