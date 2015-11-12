@@ -11,7 +11,7 @@ Programming languages that provide safety through virtualization such as Java, J
 
 There have been sandboxing solutions introduced based on type-safety of programming languages to build sandboxes, i.e. validating through a type-checker \cite{JS-Sandboxing} or enforcing security policies on an untrusted system through a reference monitor \cite{JS-Sandboxing1}. Compared to these approaches, Lind provides more portability than just executing the code in a safe-sandbox browser. Lind enforces strict policies and rules to validate all segments of a code before executing it through a dual-layer protection.
 
-Many sandboxes can implement the bulk of standard libraries in a memory-safe language like Java or C\#, flaws in memory-safe code can still pose a threat. In fact, many security critical bugs can be found in the standard libraries \cite{JavaBugs}. Researchers have also discovered many severe bugs in Java \cite{Java-Lessons}. Unfortunately, any bug or failure in a programming language virtual machine is usually fatal. Lind with a very small TCB (approximately 8K LOC) enhances security compared to the above virtual machines, because of the POSIX implementation with Repy to build the sandbox.
+Many sandboxes can implement the bulk of standard libraries in a memory-safe language like Java or C\#, flaws in memory-safe code can still pose a threat. In fact, many security critical bugs can be found in the standard libraries \cite{JavaBugs}. Researchers have also discovered many severe bugs in Java \cite{Java-Lessons}. Unfortunately, any bug or failure in a programming language virtual machine is usually fatal. Lind with a very small TCB (approximately 8000 LOC) enhances security compared to the above virtual machines, because of the POSIX implementation with Repy to build the sandbox.
 
 OS virtualization techniques can be divided into two large categories:  Type-I or Type-II virtualization. Examples of Type-I virtualization (bare-metal hardware virtualization) are VMware ESX Server, Xen, LXC\footnote{https://linuxcontainers.org}, BSD’s jail, Solaris zones, and Hyper-V. Type-II virtualization (hosted hypervisor virtualization) examples are VMware Workstation, VMware Server, VirtualPC and the open-source counterpart VirtualBox. 
 
@@ -41,10 +41,13 @@ and reconstructs most OS functions with our own safe Repy code.
 System call interposition offers a number of properties that make it attractive for building sandboxes, though it can be error prone \cite{SCI-04}. Approaches for delegation and filtering have been extensively studied, 
 along with their respective tradeoffs between security and performance. 
 Janus Version 2 (J2) \cite{Janus0:96, Janus:99} uses filtering and sandboxing, while Ostia \cite{SCI-04} uses a delegation. 
+
 Ostia also provides a hybrid interposition architecture, which allows for kernel level enforcement and user policies. 
+
 The kernel module enforces policy, denies direct access to restricted resources, 
 and delegates certain calls to the emulation library, which sends transformed system calls to the agents. 
-The agent reads the policy file and handles the delegation of calls. However, system call interposition has many problems. 
+The agent reads the policy file and handles the delegation of calls. However, system call interposition has many problems.
+
 OS semantics are very difficult to replicate correctly. Indirect paths to resources are often overlooked, 
 and there are side effects to denying system calls \cite{Problems-SCI}. 
 Nevertheless, this technique is very useful and has inspired many new techniques, such as library OSes. 
@@ -54,9 +57,13 @@ and has benefitted many security systems, including Lind.
 \subsection{Software Fault Isolation}
 Software Fault Isolation (SFI) is an alternative to hardware memory protection for running two applications in one address space. SFI provides sandboxing in which native instructions can only be executed if they do not violate the sandbox's constraints \cite{SFI:93}. In this approach, memory writes are protected and code jumps  cannot access predefined memory of other programs or executing other programs codes in memory. 
 
-To enforce the safety constraints, programs demand a specific compiler in advance to validation and loading the programs. For example, in \cite{Castro-BGI} authors introduced a SFI system called Byte Granularity Isolation (BGI) as a rnutime tool to isolate drivers in separate protection SFI domains, while sharing the same address space between different domains. BGI mainly ensures write-integrity, control-flow integrity and type safety for kernel objects. For this purpose, a BGI compiler is required to transform the unmodified driver source code to instrumented driver. The instrumented driver will be linked to the BGI interposition libraries that enforce the protection constraints to produce the BGI drivers. The protection constraints that are enforced by the interposition library are implemented in access control lists (ACL). The ACLs contain policies for each byte of virtual memory and domain permissions.
+To enforce the safety constraints, programs demand a specific compiler in advance to validation and loading the programs. For example, in \cite{Castro-BGI} authors introduced a SFI system called Byte Granularity Isolation (BGI) as a runtime tool to isolate drivers in separate protection SFI domains, while sharing the same address space between different domains. BGI mainly ensures write-integrity, control-flow integrity and type safety for kernel objects. For this purpose, a BGI compiler is required to transform the unmodified driver source code to instrumented driver. The instrumented driver will be linked to the BGI interposition libraries that enforce the protection constraints to produce the BGI drivers. The protection constraints that are enforced by the interposition library are implemented in access control lists (ACL). The ACLs contain policies for each byte of virtual memory and domain permissions. A major issue of BGI is that it does not solve the vulnerabilities in kernel-level and it only deals with specific attacks that aim to pass by a faulty domain.
 
-Nooks \cite{Nooks:03} isolates Linux kernel modules, so that if they crash, the whole kernel does not crash as well. 
+
+Nooks \cite{Nooks:03} is another SFI-based solution that isolates kernel modules and device derives.
+
+
+ 
 They use two techniques: sandboxing and micro-reboots. Nooks uses both as SFI-based and user-level sandboxes. 
 
 Micros-reboots conceptually refresh small parts of the system. 
