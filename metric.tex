@@ -35,7 +35,12 @@ the Linux kernel, in addition to HAL and \texttt{fs}~\cite{palix2011faults}.
 On the other hand, Engler analyzed system code by inferring programmer 
 beliefs~\cite{engler2001bugs}. This is achieved by static analysis
 of source code that looks for contradictions, such as acquired locks are 
-not released.
+not released. There has also been work that generates vulnerability 
+signatures~\cite{brumley2006towards}, which match all exploits
+of a given vulnerability. Most of such work is based on a mix of static and
+dynamic analysis, constraint solving and symbolic execution~\cite{chou2003static}.
+However, most of these findings have not yet been used to design 
+secure systems. 
 
 Researchers in software engineering have also studied and explored 
 different metrics to identify and predict bugs in software systems. 
