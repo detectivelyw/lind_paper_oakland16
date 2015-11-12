@@ -122,6 +122,38 @@ In comparison, only 1 out of 35 bugs  (2.9\%)  was triggered in Lind.
 Comparing these results, Lind worked significantly better than the other
 systems in limiting the triggering of kernel bugs.
 
+We now discuss four vulnerabilities from Table \ref{table:trigger_vulnerabilities} 
+in more detail. Those four bugs represent four different cases in which 
+different system design philosophies have different security outcomes. 
+
+\begin{itemize}
+\item CVE-2015-5706. As shown in our results, this vulnerability was triggered in every 
+virtualization system we tested, and Native Linux, but not in Lind. This vulnerability 
+is closely related to file system calls and file flags. It resides in the \texttt{fs/namei.c} 
+kernel path. This bug can be triggered by making a \texttt{path\_openat()} function 
+call with file flag \texttt{O\_TMPFILE}. \texttt{path\_openat()} will jump to the wrong 
+place after \texttt{do\_tmpfile()}, and do \texttt{path\_cleanup()} twice. This will 
+allow local users to perform use-after-free exploitation to cause a denial of service. 
+This bug was not triggered in Lind, because Lind does not support the use of 
+\texttt{O\_TMPFILE} file flag. In fact, the Repy sandbox in Lind only allows 
+basic file operations like 
+\texttt{openfile(filename, create)}, \texttt{file.close()}, \texttt{file.readat(sizelimit, offset)}, 
+\texttt{file.writeat(data, offset)}, \texttt{listfiles()}, and \texttt{removefile(filename)}.  
+Our secure design philosophy for Lind is to only allow basic file system functions, 
+and highly restricted arguments and flags. While the design philosophies of other virtualization 
+systems allow a wide range of system functions and more complex configuration of flags to 
+pass through to the underlying OS kernel. In this case, the \texttt{O\_TMPFILE} file flag was 
+allowed in Native Linux, VirtualBox, VMWare Workstation, Docker, and Graphene. Therefore, 
+those systems suffer from the risk of this vulnerability.
+
+\item
+
+\item
+
+\item
+
+\end{itemize}
+
 \begin{table*}[!ht]
 \scriptsize
 \centering
