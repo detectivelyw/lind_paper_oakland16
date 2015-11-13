@@ -6,11 +6,12 @@ we implemented a secure sandbox system, Lind,
 for running untrusted user programs on vulnerable OS kernels. 
 Lind adapts two basic technologies as its building blocks\textendash 
 Google's Native Client, and Seattle's Repy. 
+
 As described in \S{\ref{sec.design}} (Figure \ref{fig:design}), our design has
 two main components\textendash a computation module that isolates the 
 application and a system API provided by a sandbox that isolates the complex 
 portions of POSIX.
-Google's Native Client served as the computation 
+The Google's Native Client (NaCl) ~\cite{NaCl-09} served as the computation 
 module 
 and Seattle's Repy as the system API module (Figure \ref{fig:architecture}).
 \cappos{What is this saying?  It is repetitive...}
@@ -23,13 +24,8 @@ and Seattle's Repy as the system API module (Figure \ref{fig:architecture}).
 \end{figure}
 
 \subsection{The Computation Module of Lind: Google's Native Client}
-We use Google's Native Client (NaCl)~\cite{NaCl-09} to isolate the computation
-of the user application.  NaCl is a widely used environment for efficient 
-execution of legacy code in the form of x86 and ARM binaries, which allows
-Lind to work on most types of legacy code.   Programs are compiled with
-the NaCl compiler which produces a binary with software fault isolation.
-This prevents the majority of the application from performing system calls 
-or executing arbitrary instructions. 
+
+We utilize NaCl in our design to isolate the computation of the user application.  NaCl is a widely used environment for efficient  execution of legacy code in the form of x86 and ARM binaries, which allows Lind to work on most types of legacy code. Programs are compiled with the NaCl compiler which produces a binary with software fault isolation. This prevents the majority of the application from performing system calls  or executing arbitrary instructions. 
 
 To perform a system call, the application will call into a small privileged
 part of the process that is part of the NaCl TCB which forwards system calls.
@@ -71,12 +67,12 @@ Second, we need to build a POSIX implementation that runs within that sandbox.
 
 \subsubsection{The Repy Sandbox Kernel}
 
-As we have discussed in \S{\ref{sec.design}}, the sandbox kernel needs to be secure and bug-free. 
+As discussed earlier in \S{\ref{sec.design}}, the sandbox kernel needs to be secure and bug-free. 
 Because it is the TCB of the system, any bugs within it could cause fatal problems, 
 and allow attackers to access the OS kernel and gain kernel privilege. 
-Seattle's Repy was selected as our system API module, because it has a very small sandbox kernel, 
-comprised of only 8K LOC. Using Repy also demonstrated our key design principle that 
-our system should only access the safe portions of the OS kernel. In the Repy sandbox kernel, 
+We used Seattle's Repy system API module due to its tiny sandbox kernel ( 
+comprised of only around 8,000 LOC). Using Repy also was utilized according to our key design principle that 
+our proposed system should only access the safe portions of the OS kernel. In the Repy sandbox kernel, 
 there are 33 basic API functions, including 13 network functions, 6 file functions, 6 threading functions, 
 and 8 miscellaneous functions (Table \ref{table:RepyKernel}) \cite{Repy-10}, \cite{RepyKernel}. Most of those functions are simple and 
 regularly used system calls that access the commonly used kernel paths. 
@@ -251,9 +247,9 @@ received by the computation module NaCl, and then redirected to our system API m
 The API module includes a POSIX API to serve those requests. 
 
 A POSIX API is a set of standard operating system interfaces that provide operating system functions 
-to the user code. However, the POSIX API is large and complex, which means 
-it would be really difficult to ensure that its implementation is secure and bug-free. 
-Our choice to use Repy helped us solve this key security problem. 
+to the user code. However, the POSIX API is large and complex enough to ensure that its implementation is secure and bug-free. 
+
+Our choice to use Repy helped us solve this architectural security problem. 
 Since Repy is a programming language sandbox, it can provide the ideal isolation 
 we needed when constructing our POSIX API. In Lind, 
 complex system functions are reimplemented using Repy code, 
@@ -261,14 +257,14 @@ based on the ``safe-reimplement'' principle from our design in \S{\ref{sec.desig
 
 \subsection{Operations}
 
-Here, we take a closer look at how Lind functions when an application seeks access. 
-This discussion focuses mainly on the connection between Google's Native Client and Seattle's Repy sandbox.
+This section discusses the logical connection between different pieces of the Lind approach including NaCl and Seattle's Repy sandbox.
 
 Lind combines the NaCl and Repy component to provide native computation and 
 safe access to the system. Untrusted programs are run in NaCl, 
 but access to all system resources is diverted to a Repy program. 
 This program is responsible for accessing the system on behalf of the program, 
 which is called the Lind library OS. A NaCl sandbox is built on top of the Repy sandbox. 
+
 To service a system call in NaCl, a server routine marshals its arguments into a text string, 
 and sends the call and the arguments to Repy sandbox. 
 The library OS then executes the appropriate system call, marshals the result and 
@@ -285,12 +281,12 @@ the internals of an application in Lind are run in NaCl, a very high performance
 This balances the performance of the system, with the ease of implementation and maintenance 
 of the library OS component of Lind. 
 
-Furthermore, this particular design and architecture for sandboxing ensures the programs are portable. 
+The novel idea behind the architecture and design for sandboxing using Lind ensures the programs are portable. 
 Programs running inside Lind are written to work against a standard POSIX glibc interface, 
 and, since the Lind runtime is strictly user-level, it can work on many different platforms 
 including Linux, Mac OS X and Windows.
 
-Finally, Lind is lightweight. Because the sandbox only incurs overhead when there is a system call, 
+The lightweight and minimized overhead is another feature of Lind. Because the sandbox only incurs overhead when there is a system call, 
 overall overhead for Lind is low. Lind uses a native interface for execution, 
 allowing CPU-and-memory-intensive applications to run at speeds that are equivalent to NaCl and near native speed. 
 

@@ -1,13 +1,12 @@
 \section{Developing and Assessing a Quantitative Evaluation Metric for
 Kernel Security}
 \label{sec.metric}
-
-
-In this section, we describe in detail the aforementioned metric to 
-quantitatively evaluate kernel security. We first discuss issues with
-commonly used metrics for code complexity. Then we present our metric that
-focuses on using kernel code paths used by common applications.  We
-then show how our metric is able to provide a fair comparison of 
+ 
+This section describes the aforementioned metric in detail to 
+quantitatively evaluate kernel security. It first outlines the issues with
+commonly used metrics for code complexity. Then it presents our proposed metric that
+focuses on using kernel code paths used by common applications. Finally, we
+show how our metric is able to provide a fair comparison of 
 different security systems, and their impact on the kernel, 
 and to reveal which portions contained fewer bugs.
 
@@ -189,10 +188,8 @@ we identified these paths as a subset of the total reachable kernel paths as fol
 
 %\begin{enumerate}
 First, common paths were captured by running popular user applications or open-source libraries. Most notably, these experiments were conducted in data collection phase included running several applications such as two large-scale browsers (Mozilla Firefox and Google Chrome), in addition to running 50 packages among the top 200 popular Debian packages \cite{Top-Packages} in a Linux kernel version 3.14.1.
-\cappos{What version of Linux?}  \cappos{Ali: why these apps?}
 
-During this step, we conducted several other operations needed to access common paths, including intensive file management tasks to create/read/update or delete files and directories from the underlying (ext3) filesystem. These tests were completed during a discrete period of 20 hours over 5 days.
-\cappos{This all needs to be much better explained...}
+During this step, we conducted several other operations needed to access common paths, including intensive file management tasks to create/read/update or delete files and directories from the underlying filesystem. These tests were completed during a discrete period of 20 hours over 5 days.
 
 Next, the total reachable paths were required to be captured by comprehensive system call fuzzing and running the Linux kernel test suite. These experiments helped to capture the total reachable paths in the kernel as thoroughly  as possible. 
 
@@ -399,11 +396,10 @@ $2.5\%$} \\ \hline
 \label{table:vulnerabilities_commonly_used_kernel_paths}
 \end{table*}
 
-From the results, we can see that commonly used kernel paths contain only
+These results of this analysis suggest that commonly used kernel paths contain only
 2.5\% of the bugs we had targeted. 
-Since the total reachable kernel paths contain 50\% of the bugs we
-examined, 
-our results show that commonly used kernel paths clearly contain fewer bugs
+Since the total reachable kernel paths contain 50\% of the bugs that were 
+examined in this paper, it cab be inferred that commonly used kernel paths clearly contain fewer bugs
 than other portions of the kernel. 
 \cappos{Why?}
 Our hypothesis and findings provide insights and guidelines for new designs
