@@ -60,7 +60,7 @@ code to
 exploit each of the kernel bugs \cite{Exploit-Database}. We were able to
 run and obtain results for 
 35 out of the 69 bugs in our experiments. For the rest of the bugs, 
-we could not find exploit code that would trigger them effectively at that
+we could not find code that would trigger them effectively at that
 moment. 
 In addition, it was very difficult to accurately determine if more complex
 bugs 
@@ -123,7 +123,8 @@ Comparing these results, Lind worked significantly better than the other
 systems in limiting the triggering of kernel bugs.
 
 We now discuss four vulnerabilities from Table \ref{table:trigger_vulnerabilities} 
-in more detail. Each case represents a different security system design philosophy, and, as a result, has a different outcome. 
+in more detail. Those four bugs represent four different cases in which 
+different system design philosophies have different security impacts. 
 
 \begin{itemize}
 \item CVE-2015-5706. As shown in our results, this vulnerability was triggered in every 
@@ -174,7 +175,7 @@ isolation to prevent this bug from happening.
 VirtualBox, VMWare workstation, Docker, and Native Linux. It resides in the \texttt{sf/ext4/file.c} kernel path. 
 This bug can be triggered via making a file system write function call, together with \texttt{fcntl} function call 
 with argument \texttt{F\_SETFL}, and \texttt{O\_DIRECT} flag. If triggered, it could allow attackers to cause 
-a denial of service (file unavailability). In Lind, complex file system function like \texttt{fcntl}, and complicated 
+a denial of service (file unavailability). In Lind,  for functions like \texttt{fcntl}, complicated 
 file flags like \texttt{O\_DIRECT} are not allowed. Graphene also has a controlled ABI and certain degree of 
 system call restriction which does not allow \texttt{fcntl} function with \texttt{O\_DIRECT} flag. 
 Thus they both avoided this bug. Other systems like VirtualBox, VMWare Workstation, Docker, and Native Linux, 
@@ -292,7 +293,7 @@ not triggered)}
 Systems}
 \label{Reachable-Kernel-Trace-Analysis-for-Different-Virtualization-Systems}
 
-After establishing that Lind was efficient at finding bugs, our next step
+After establishing that Lind was efficient at preventing kernel bugs, our next step
 was to examine how Lind was able to achieve this efficiency.  
 To answer this question, we obtained the total reachable kernel trace for
 each of the systems (including Lind) 
@@ -303,6 +304,19 @@ As the numbers reveal, Lind accessed the minimum amount of code in the OS
 kernel. More importantly, 
 all the kernel code it accessed was in the safe portion of the kernel, the
 commonly used kernel paths. 
+For example, a large portion of the kernel paths accessed by Lind lie in 
+the \texttt{fs/} kernel path in order to perform file system operations. 
+In the \texttt{fs/} kernel path, the commonly used paths that contain 
+fewer bugs are the lines of code that do not involve complex function calls 
+or complicated and rarely used arguments/flags. In Lind, only basic function calls, 
+like \texttt{open()}, \texttt{close()}, \texttt{read()}, \texttt{write()}, \texttt{mkdir()}, 
+\texttt{rmdir()}, are allowed. In addition, only regularly used flags are allowed. 
+For example, for file system function \texttt{open()}, only 
+\texttt{O\_CREAT}, \texttt{O\_EXCL}, \texttt{O\_APPEND}, \texttt{O\_TRUNC}, 
+\texttt{O\_RDONLY}, \texttt{O\_WRONLY}, and \texttt{O\_RDWR} are permitted. 
+The use of only those basic system functions together with regularly used flags leads to 
+result that the reachable kernel trace we obtained with Lind all lies within the safe 
+portion of the kernel. 
 As we have already verified in \S{\ref{Verification-of-Hypothesis}}, the safe portion of 
 the kernel contains fewer kernel bugs. 
 So it make sense that Lind is less likely to trigger kernel bugs. 
@@ -310,7 +324,17 @@ So it make sense that Lind is less likely to trigger kernel bugs.
 The other virtualization systems all accessed a substantial number of code
 paths in the kernel, 
 and they all had access to a larger section of the risky portion, the
-uncommonly used kernel paths. 
+uncommonly used kernel paths. This is due to the fact that they have 
+significantly more rely on many complex system function calls, and 
+allow extensive use of more complicated flags. For example, 
+Graphene provides a complex system call API that allows 
+\texttt{fork()}, and \texttt{signals}, which can access many risky lines of code. 
+VirtualBox, VMWare Workstation, and Docker have even larger 
+code base and more complicated system functions. They also allow 
+rarely used flags, such as \texttt{O\_TMPFILE}, \texttt{O\_NONBLOCK}, 
+and \texttt{O\_DSYNC}, which can reach potentially dangerous lines 
+of code.  
+%
 Based on our hypothesis, many historical bugs, as well as undetected
 zero-day bugs, could be located there. 
 Thus, accessing the risky portion without restriction is dangerous, and
@@ -370,7 +394,7 @@ portion of the OS kernel.
 Since the safe portion contains fewer kernel bugs, the Repy sandbox kernel
 will have a very slim chance to trigger OS kernel bugs.
 
-The design explained above shows that even if our Repy sandbox kernel has a
+The results explained above shows that even if our Repy sandbox kernel has a
 bug or failure inside, 
 it only slightly increases the amount of OS kernel paths open to attacks,
 and all these paths accessed are still inside the safe portion. 
