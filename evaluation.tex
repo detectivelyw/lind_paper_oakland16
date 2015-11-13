@@ -183,6 +183,13 @@ all suffer from this vulnerability, due to a design philosophy that has relaxed 
 
 \end{itemize}
 
+As shown from the above four case studies, a usual way to trigger a bug is to go through complex system calls, 
+or basic system calls with complicated or rarely used flags. In Lind, our design philosophy is to only leverage those 
+simple and regularly used system calls with highly restricted flags or no flags at all. Therefore, the results that only 
+1 out of 35 bugs was triggered in Lind is a natural outcome we expect to see from our clean design. Lind provides 
+an environment that suffers the least risk of triggering zero-day bugs in the underlying OS kernel, 
+which is the main benefit of running applications in it.  
+
 \begin{table*}[!ht]
 \scriptsize
 \centering
