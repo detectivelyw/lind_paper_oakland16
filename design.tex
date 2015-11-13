@@ -7,12 +7,12 @@ This section discusses how to use the observation
 The key idea of our design is that all code \emph{including the complex part
 of the operating system API} must have a very small TCB that accesses only 
 commonly used kernel paths. 
-Complex and dangerous system functions, which may access the risky portion of the kernel, 
+As explained earlier, any complex or possibly risky system functions 
 are reimplemented by our own code within a sandbox. 
 Therefore, any bugs or failures within the implementation of those complex system functions 
 will be contained by the sandbox, and will not have the chance to reach 
-and trigger risky portions of the kernel. Thus, we call it a ``safe-reimplementation'' design.
-\yanyan{this definition should appear early in the paper.}
+and trigger risky portions of the kernel. 
+
 
 \begin{figure}%[h]
 \centering
@@ -97,7 +97,7 @@ Here is an example of how this reimplementation would work with the symbolic lin
 anyways.}  \cappos{Does a diagram showing the different design philosophies and
 where they put functionality make sense?}
 If there is a bug in this function, our safe reimplementation will not rely on the kernel code paths for symbolic links. 
-Instead, our sandbox system will implement the (incorrect) buggy behavior, \yanyan{why implement the buggy behavior?} but do so within the sandbox. 
+Instead, our sandbox system will implement the incorrect behavior, so the program will not be forced to quit, but will do so in the sandox. \yanyan{why implement the buggy behavior?}  
 Since the reimplementation code does not have privileged access to the system as the OS kernel does, 
 this will not result in a security issue. The usual outcome of a bug in this case is simply that the application will fail.
 

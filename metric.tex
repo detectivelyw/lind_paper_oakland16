@@ -8,7 +8,7 @@ quantitatively evaluate kernel security. We first discuss issues with
 commonly used metrics for code complexity. Then we present our metric that
 focuses on using kernel code paths used by common applications.  We
 then show how our metric is able to provide a fair comparison of 
-different security systems, their impact on the kernel, 
+different security systems, and their impact on the kernel, 
 and to reveal which portions contained fewer bugs.
 
 \subsection{Previous Risk Metrics for Software}
@@ -25,7 +25,7 @@ Structurally, the Linux kernel is divided into several main sub-directories:
 \texttt{kernel} (main kernel), \texttt{ipc} (inter-process communication), 
 \texttt{net} (networking), \texttt{fs} (file system), \texttt{drivers} (device drivers), 
 etc. Chou showed in~\cite{chou2001empirical} that function's directory, e.g., 
-\texttt{drivers}, reults in certain parts of the Linux kernel have error rates much 
+\texttt{drivers}, results in certain parts of the Linux kernel having error rates much 
 higher than the rest of the kernel; kernel source code size and age also affects
 how frequently errors occur in the kernel.
 %largest/newest quartile of functions in kernel have error rates 
@@ -183,17 +183,17 @@ we identified these paths as a subset of the total reachable kernel paths as fol
 First, common paths were captured by running popular user applications or open-source libraries. Most notably, these experiments were conducted in data collection phase included running several applications such as two large-scale browsers (Mozilla Firefox and Google Chrome), in addition to running 50 packages among the top 200 popular Debian packages \cite{Top-Packages} in a Linux kernel version 3.14.1.
 \cappos{What version of Linux?}  \cappos{Ali: why these apps?}
 
-In this step, several other experiments that were required to be completed such as intensive file management tasks to create/read/update or delete files and directories from the underlying (ext3) filesystem during a discrete period of 20 hours over 5 days.
+During this step, we conducted several other operations needed to access common paths, including intensive file management tasks to create/read/update or delete files and directories from the underlying (ext3) filesystem. These tests were completed during a discrete period of 20 hours over 5 days.
 \cappos{This all needs to be much better explained...}
 
-Next, the total reachable paths were required to be captured by comprehensive system call fuzzing and running the Linux kernel test suite. This experiments helped to capture the total reachable paths in the kernel as completely \gholami {thoroughly?} as possible. 
+Next, the total reachable paths were required to be captured by comprehensive system call fuzzing and running the Linux kernel test suite. These experiments helped to capture the total reachable paths in the kernel as thoroughly  as possible. 
 
 Two approaches were used to capture this trace.
 
 \begin{itemize}
-\item The system call fuzzing experiment were designed to utilize the Trinity system call fuzz tester \cite{Trinity}. This included sequential execution of more than 300 system calls with 1 million iterations for executing each system call by 16 child processes as Trinity workers.
+\item The system call fuzzing experiments were designed to utilize the Trinity system call fuzz tester \cite{Trinity}. This included sequential execution of more than 300 system calls with 1 million iterations for executing each system call by 16 child processes as Trinity workers.
 
-The including file management and network system calls, \yanyan{what is file management?} which gave us a thorough kernel trace. 
+These included file management and network system calls, \yanyan{what is file management?} which gave us a thorough kernel trace. 
 
 \item Linux Test Project (LTP) \cite{LTP} was another tool that was used to capture the total reachable kernel trace.
 
@@ -213,8 +213,8 @@ kernel paths are commonly used.
 More importantly, only 2.5\% of the bugs examined were found in the common
 paths, 
 while 50\% of the bugs were found in the total reachable kernel paths. 
-Our results confirm that common paths contain fewer bugs than uncommon
-paths. \yanyan{I feel this is a bit early to make this conclusion.}
+Our results strongly suggest that common paths contain fewer bugs than uncommon
+paths. \yanyan{I feel this is a bit early to make this conclusion.} \lois(does the slight wording change answer your concern, Yanyan?)
 
 \subsubsection{Coverage Analysis of Common Paths}
 
@@ -276,8 +276,8 @@ in the common paths trace also appeared in the total reachable paths trace.
 But there are many lines of code (more than 50\%) 
 in the total reachable paths trace that are not in the common paths. This
 shows that the common paths trace and 
-the total reachable paths we obtained are correct, because common paths in
-the kernel should definitely be reachable. \yanyan{how to define correct?}
+the total reachable paths we obtained are as expected, because common paths in
+the kernel should definitely be reachable. \yanyan{how to define correct?} \lois(again, Yanyan, does the word change from "correct" to "as expected" help?)
 One further finding is that the common paths account
 for only 38.5\% of the total reachable paths. 
 This suggests that a large portion (61.5\%) of the kernel is not frequently

@@ -17,7 +17,7 @@ accessing critical resources, such as memory, I/O, or CPU.
 The kernel provides an interface to serve these requests 
 and provides essential functionality for all applications running in the
 system. 
-Thus all code, whether being sandboxed or untrusted, will make calls 
+Thus all code, whether sandboxed or untrusted, will make calls 
 that are eventually processed by the kernel. 
 
 Unfortunately, operating system kernels are not safe and secure from
@@ -89,7 +89,7 @@ applications.
 
 \item We assume it is possible to provide some form of computational 
 containment.  This means that an isolated program cannot simply
-make arbritrary system calls and access the kernel directly.  This could
+make arbitrary system calls and access the kernel directly.  This could
 be provided through software-fault isolation~\cite{SFI:93}, programming 
 language techniques\cappos{cites}, or by running isolated code in a
 distinct region of virtual memory\cappos{cites}.
