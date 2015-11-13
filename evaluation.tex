@@ -86,8 +86,8 @@ kernel trace.
 Since our primary goal was to build a secure system, our core evaluation
 was conducted primarily 
 from a security perspective
-(\S{\ref{Linux-Kernel-Bug-Test-and-Evaluation}}, 
-\S{\ref{Reachable-Kernel-Trace-Analysis-for-Different-Virtualization-Systems}}, 
+(\S{\ref{Linux-Kernel-Bug-Test-and-Evaluation}} --
+%\S{\ref{Reachable-Kernel-Trace-Analysis-for-Different-Virtualization-Systems}}, 
 \S{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}). 
 We also conducted an evaluation of the performance overhead of Lind
 (\S{\ref{Performance-Evaluation}}) 
@@ -155,9 +155,9 @@ This is the only vulnerability in our test that was triggered in every
 system, including Lind. It resides inside the \texttt{mm/shmem.c} kernel path. This bug can 
 be triggered by using \texttt{mmap()} system call to access a hole in the memory. 
 The \texttt{mmap()} call then invokes \texttt{shmem\_fault()}, which will cause contention 
-on \texttt{i\_mmap\_mutex}, and lead into serious starvation.  
+on \texttt{i\_mmap\_mutex}, and lead to a serious starvation.  
 The reason that Lind also triggered this bug is because \texttt{mmap()} cannot easily 
-be safely reimplemented inside our POSIX reimplementation.  The reason why is
+be safely reimplemented inside our POSIX reimplementation.  The reason is
 that \texttt{mmap()} sets up a memory region where the OS will later 
 intervene and automatically convert all accesses into accesses to the
 underlying file.  Thus the code does not explicitly make system calls.  As
@@ -173,12 +173,14 @@ triggered in every system.
 
 \item \emph{Only Native Linux vulnerable.}  Representative bug: CVE-2014-5045. 
 This vulnerability was only triggered inside Native Linux. It resides in the 
-\texttt{fs/namei.c} kernel path. It is caused because 
-\texttt{mountpoint\_last(struct nameidata *nd, struct path *path)} function does not properly 
-maintain a reference count during attempts to use the \texttt{umount} system call 
-, in conjunction with a symbolic link. Unmount on symbolic link could block another unmount operation, 
+\texttt{fs/namei.c} kernel path. This vulnerability got triggered because 
+the \texttt{mountpoint\_last()}
+%\texttt{mountpoint\_last(struct nameidata *nd, struct path *path)} 
+function does not properly 
+maintain a reference count during attempts to use the \texttt{umount} system call, 
+in conjunction with a symbolic link. Unmount on symbolic link could block another unmount operation, 
 and allow attackers to cause a denial of service or deploy use-after-free exploitation. 
-Lind's does not implement, but similar functionality is implemented entirely 
+Lind's \yanyan{Lind's what?} does not implement, but similar functionality is implemented entirely 
 within SafePOSIX.  Thus a bug would (at most) enable an attacker to execute
 code within the Repy sandbox.
 Other virtualization systems have their own metadata to maintain their file directories and symbolic links. \cappos{Why did the flag in the first example
@@ -189,16 +191,16 @@ isolation to prevent this bug from happening.
 
 \item \emph{Some safe, some vulnerable.}  Representative bug: CVE-2014-8086. 
 This vulnerability was not triggered inside Graphene and Lind, but was triggered inside 
-VirtualBox, VMWare workstation, Docker, and Native Linux. It resides in the \texttt{sf/ext4/file.c} kernel path. 
+VirtualBox, VMWare workstation, Docker, and Native Linux. It resides in the \texttt{sf/ext4/file.c} kernel path. \yanyan{\texttt{fs/ext4/file.c}?}
 This bug can be triggered via making a file system write function call, together with \texttt{fcntl} function call 
 with argument \texttt{F\_SETFL}, and \texttt{O\_DIRECT} flag. If triggered, it could allow attackers to cause 
 a denial of service (file unavailability). Lind implements \texttt{fcntl}
 in SafePOSIX, so the underlying kernel is not called.
 Graphene checks and blocks certain system calls, including
 a \texttt{fcntl} system call with the \texttt{O\_DIRECT} flag. 
-Thus they both avoided this bug. Other systems like VirtualBox, VMWare Workstation, Docker, and Native Linux, 
+Thus they both prevented this bug. Other systems like VirtualBox, VMWare Workstation, Docker, and Native Linux, 
 all suffer from this vulnerability because they call into the host OS
-kernel to handle the call.
+kernel which handles the call.
 
 \end{itemize}
 
