@@ -49,7 +49,15 @@ predictor~\cite{Bug-Location}, as has a file's revision status and
 whether or not the file previously contained bugs~\cite{Bug-Location, 
 lewis2013does}. Studies have also been done based on 
 the number of functions and/or the number of executable lines of code in
-the function~\cite{Mining-Metrics}. 
+the function~\cite{Mining-Metrics}. Coverage-based fault localization, 
+on the other hand, assumes that execution events that occur mostly in failing
+test cases, but rarely in passing test cases, are more \textit{suspicious} 
+of being the fault~\cite{jones2002visualization}. Follow-on work used 
+the set difference of the statements covered by passing and failing test 
+cases with run-time events~\cite{agrawal1995fault, jones2005empirical}, 
+and used statistical likelihood that a predicate that evaluates to True is 
+correlated with failure~\cite{liblit2005scalable}. 
+
 While these metrics can be useful in building models to provide a general
 idea about 
 where bugs may be located in software systems, they have limitations. 
@@ -314,6 +322,10 @@ The results of our experiment are shown the last two columns in Table
 \begin{table*}[!ht]
 \scriptsize
 \centering
+\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of
+the Kernel 
+({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability
+not in paths)}
 \begin{tabular}{|l|l|c|c|}\hline
 \multirow{2}{*}{\textbf{Vulnerability}} & \multirow{2}{*}{\textbf{Specific
 Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
@@ -384,10 +396,6 @@ Type}} & \multicolumn{2}{c|}{\bf Portion of the Kernel} \\
  \multicolumn{2}{|c|}{\bf Percentage contains bugs} & {\bf $50\%$} & {\bf
 $2.5\%$} \\ \hline
 \end{tabular}
-\caption {Linux Kernel Bugs, and Vulnerabilities in Different Portions of
-the Kernel 
-({\color{red}\ding{51}}: vulnerability in paths; \ding{55}: vulnerability
-not in paths)}
 \label{table:vulnerabilities_commonly_used_kernel_paths}
 \end{table*}
 
