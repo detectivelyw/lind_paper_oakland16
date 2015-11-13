@@ -11,15 +11,12 @@ operating system (OS) kernel performs this important function. Unfortunately, co
 
 
 There is a diverse set of defensive technologies to protect kernels from 
-attacks, including OS virtualization \cite{Xen-03},\cite{Microsoft-Hyper-V}, system call filtering \cite{Janus0:96, Janus:99},\cite{SCI-04}, and library OSes \cite{Bascule},\cite{Drawbridge-11},\cite{Graphene-14}. Common security wisdom is that by running software in a virtual machine, 
-one can prevent the attacker from exploiting flaws in the underlying kernel.  However, the security of virtualization itself is a 
-challenging issue \cite{Tal}. As we will show later, virtualization cannot prevent about one third of vulnerabilities on the Linux kernel. As such, even with these technologies in place, applications running in a virtual machine still pose a substantial risk.
+attacks, including OS virtualization (e.g., Xen, KVM, VirtualBox), system call filtering \cite{Janus:99},\cite{SCI-04}, and library OSes \cite{Bascule},\cite{Drawbridge-11}. Common security wisdom is that by running software in a virtual machine, one can prevent the attacker from exploiting flaws in the underlying kernel. However, the security of virtualization itself is a  challenging issue \cite{Tal}. As we will demonstrate in this paper, despite employing virtualization techniques, still one third of vulnerabilities on the Linux kernel are not prevented from being exploited. This rate highlights substantial risk to run applications in virtualized envinronments.
 
-In this paper, we first develop a metric that helps identify where
-within the kernel these vulnerabilities are likely to be located. We
+In this paper, we develop a metric that helps to identify where
+within the kernel vulnerabilities are likely to be located. For this purpose, we
 examined 40 kernel patches that fix severe Linux kernel security bugs
-and analyzed the lines of the kernel where those bugs occurred.  Our
-analysis shows that kernel paths used by popular applications contain fewer
+and analyzed the lines of the kernel where those bugs occurred. The results of this analysis shows that kernel paths used by popular applications contain fewer
 security bugs, and therefore, can be exposed with less risk. 
 
 While limiting access to kernel code is important, it is
@@ -31,14 +28,13 @@ As a result, a vulnerability in the privileged codebase is as much of a security
 risk as a flaw in the kernel.  %However, this privileged code needs to be
 %complex because the system must implement complex 
 % must exist somewhere or else applications will not run. 
-For example, 
-a vulnerability in VMWare's codebase caused by buffer overflows in the VIX
+For example, a vulnerability in VMWare's codebase caused by buffer overflows in the VIX
 API could allow local users to escape out of the guest VM and 
 gain privilege escalation to execute arbitrary code in the host
 OS, even shellcode to access the kernel of the host OS~\cite{CVE-2008-2100}.  
 %\cappos{Revise this paragraph further}
-\cappos{We need an example of a root exploit in the host OS being triggered 
-from a guest...  This is just a guest escape...}
+
+CVE-2011-1751 was another bug due to missing check in KVM's QEMU emulation of PCI-ISA bridge. This enables an attacker to utilize other techniques \cite{Virtunoid} for root exploit in the host OS being triggered from a guest. 
 
 %To address this issue, 
 We propose a new design paradigm for virtualization 
