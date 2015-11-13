@@ -3,15 +3,15 @@
 
 To run multiple applications on a computer, it is critical to securely
 manage access to the underlying hardware. In modern computer systems,
-either a hypervisor, a virtual machine monitor (VMM), or an 
-operating system (OS) kernel performs this important function. Unfortunately, code within an operating system kernel
-may contain flaws and vulnerabilities. If the kernel is attacked by malicious parties, these flaws can provide the attacker unrestricted access to the system. One critical flaw, discovered in the Linux kernel in the \texttt{futex} subsystem call can allow an attacker to gain ring 0 control via the \texttt{futex} syscall, and potentially execute arbitrary code
-with kernel mode privileges~\cite{CVE-2014-3153}. \cappos{Possibly omit
-this sentence.}
+either a hypervisor - a virtual machine monitor (VMM), or an 
+operating system (OS) kernel performs this important function. Unfortunately, code within an OS kernel may contain flaws and vulnerabilities. If the OS kernel is attacked by a malicious adversary, potential vulnerabilities can enable the attacker to have unrestricted access to the system.
+
+
+%One critical flaw, discovered in the Linux kernel in the \texttt{futex} subsystem call can allow an attacker to gain ring 0 control via the \texttt{futex} syscall, and potentially execute arbitrary code with kernel mode privileges~\cite{CVE-2014-3153}. \cappos{Possibly omit this sentence.}
+
 
 There is a diverse set of defensive technologies to protect kernels from 
-attacks, including OS virtualization, system call filtering, and library OSes.
-Common security wisdom is that by running software in a virtual machine, 
+attacks, including OS virtualization \cite{Xen-03},\cite{Microsoft-Hyper-V}, system call filtering \cite{Janus0:96, Janus:99},\cite{SCI-04}, and library OSes \cite{Bascule},\cite{Drawbridge-11},\cite{Graphene-14}. Common security wisdom is that by running software in a virtual machine, 
 one can prevent the attacker from exploiting flaws in the underlying kernel.  However, the security of virtualization itself is a 
 challenging issue \cite{Tal}. As we will show later, virtualization cannot prevent about one third of vulnerabilities on the Linux kernel. As such, even with these technologies in place, applications running in a virtual machine still pose a substantial risk.
 
