@@ -1,18 +1,18 @@
-\section{Study Limitations/Exceptions and Future Work}
+\section{Limitations and Future Work}
 \label{sec.limitation}
 
-
-First of all, our metric relies on identifying lines of
-code in the kernel that are executed when running applications in security
+We discuss the limitations of Lind in this section. 
+First, our metric relies on identifying lines of
+code in the kernel that are executed when running applications in secure
 systems. In our future work we will explore if the bug metric works well for
 operating system virtual machines with a hypervisor.  It is not clear if
-existing hypervisors are so small and compact that effectively all paths
+existing hypervisors are small and compact enough that effectively all paths
 are common paths or whether there is still substantial benefit from our metric.
 
-A second issue is that our criteria for determining if a kernel trace is
+A second limitation is that our criteria for determining if a kernel trace is
 safe or risky was to  check it against a list of historical kernel bugs.
 However, not all bugs can be accurately checked in this manner. For
-example, some bugs caused by a race condition, cannot be identified by
+example, bugs that are caused by a race condition cannot be identified by
 directly checking if certain lines of code are executed. For complicated
 bugs that involve defects in the internal kernel data structures, or
 require complex triggering conditions across multiple kernel paths, our
@@ -26,9 +26,10 @@ for detection.
 %be extended to do so, we leave this for future work. Also, as mentioned in
 %the previous section, 
 Lind has not been optimized for performance, so the
-results we present here should be taken as a baseline of what is possible. 
-We would like to explore what existing OSVM optimizations can safely
-be applied and what their impact is.
+results we present here should be taken as a baseline. 
+%of what is possible. 
+We would like to explore what existing OSVM optimizations can be safely
+applied and what their impact is.
 
 %There were also some avenues we intentionally excluded in this initial
 %study that could form the basis for interesting research projects in the
@@ -39,9 +40,10 @@ be applied and what their impact is.
 We would also like to test our metric in other
 popular operating systems, such as Windows and Mac OS. Our experiments were
 limited to Linux kernel 3.14.1 and some of the typical virtualization
-systems that existed in Linux. It would be interesting and potentially
-quite beneficial to the advance of secure systems if similar tests could be
-run in those other widely-used operating systems.  In particular, it would
+systems that existed in Linux. It would be interesting 
+%and beneficial to the advance of secure systems 
+if similar tests could be
+run in other widely-used operating systems.  In particular, it would
 be interesting to see if having the host and guest VM utilize different
 operating systems provides better protection.
 
