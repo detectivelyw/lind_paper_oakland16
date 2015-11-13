@@ -55,27 +55,23 @@ The concepts behind System Call Interposition have evolved into other modern tec
 and has benefitted many security systems, including Lind. 
 
 \subsection{Software Fault Isolation}
-Software Fault Isolation (SFI) is an alternative to hardware memory protection for running two applications in one address space. SFI provides sandboxing in which native instructions can only be executed if they do not violate the sandbox's constraints \cite{SFI:93}. This goal is achieved through machine-level code analysis to enforce security policies. In this approach, memory writes are protected and code jumps cannot access predefined memory of other programs or executing other programs codes in memory. 
+Software Fault Isolation (SFI) is an alternative to hardware memory protection for running two applications in one address space by instruction rewriting. SFI provides sandboxing in which native instructions can only be executed if they do not violate the sandbox's constraints \cite{SFI:93}. This goal is achieved through machine-level code analysis to enforce security policies. In this approach, memory writes are protected and code jumps cannot access predefined memory of other programs or executing other programs codes in memory. 
+
+Nooks \cite{Nooks:03} is another SFI-based solution that provides protected environment for running device drivers by isolating kernel modules and device derives mainly for reliability and fault-resistance. Nooks runtime environment is located within the kernel and it includes majority of drivers that needs to be protected from each other, i.e. network nook and video nook are two protection domains without the possibility for memory writes outside their protection domain. The Nook layer function as a reference monitor between device devices and physical hardware by forwarding interrupts  Nooks also wrap calls from the operating system kernel into device drivers and from device drivers into the kernel, allowing the operating system to track resource usage and verify data that is passed into and out of the kernel. Object tracking to allow OS for resource consumption is another feature of wrappers in Nooks. 
+
+
+The preliminary design of SFI approach was build on RISC architectures. In PittSFIeld \cite{PittSFIeld}, authors optimized and extended the original SFI to support CISC architectures. For this purpose, the source instructions are padded with no-ops to fit, i.e. in the 16-byte x86 byte chunk alignment, where a call instruction is appended. A sequence of instructions form a instruction streams that ensures execution order of the sequence. The final code before execution will be checked by a verifier component to ensure safety. The authors used machine-checked proof for increased assurance that verifier only approves safe operations.
+
+SFI has been also used in MisFIT \cite{MISFit} to ensure kernel modules integrity for x86. The authors have emphasized on the extendability of object-oriented programming languages to eliminate the need for remote calls to achieve high throughput sandboxes. SFI containers embody the extensions to demonstrate the integrity validation check in conjunction with the host environment resources.
 
 To enforce the safety constraints, programs demand a specific compiler in advance to validation and loading the programs. For example, in \cite{Castro-BGI} authors introduced a SFI system called Byte Granularity Isolation (BGI) as a runtime tool to isolate drivers in separate protection SFI domains, while sharing the same address space between different domains. BGI mainly ensures write-integrity, control-flow integrity and type safety for kernel objects. For this purpose, a BGI compiler is required to transform the unmodified driver source code to instrumented driver. The instrumented driver will be linked to the BGI interposition libraries that enforce the protection constraints to produce the BGI drivers. The protection constraints that are enforced by the interposition library are implemented in access control lists (ACL). The ACLs contain policies for each byte of virtual memory and domain permissions. A major issue of BGI is that it does not solve the vulnerabilities in kernel-level and it only deals with specific attacks that aim to pass by a faulty domain.
 
 
-Nooks \cite{Nooks:03} is another SFI-based solution that provides protected environment for running device drivers by isolating kernel modules and device derives mainly for reliability and fault-resistance. Nooks runtime environment is located within the kernel and it includes majority of drivers that needs to be protected from each other, i.e. network nook and video nook are two protection domains without the possibility for memory writes outside their protection domain. The Nook layer function as a reference monitor between device devices and physical hardware by forwarding interrupts  Nooks also wrap calls from the operating system kernel into device drivers and from device drivers into the kernel, allowing the operating system to track resource usage and verify data that is passed into and out of the kernel. Object tracking to allow OS for resource consumption is another feature of wrappers in Nooks. 
+Recently, Google provided Native Client (NaCl) \cite{NaCl-09} for Chrome browser to allow native executable code to be run directly in a browser using the PittSFIeld semantics. NaCl prevents suspicious codes for memory corruption or direct access to the underlying system resources. For this purpose NaCl loads untrusted modules from the trusted modules into two different address spaces, where in most SFI approaches both untrusted and trusted codes are loaded into a common address space. 
 
-Recently, Google provided Native Client (NaCl) \cite{NaCl-09} for Chrome browser to allow native executable code to be run directly in a browser using the SFI semantics. NaCl prevents suspicious codes for memory corruption or direct access to the underlying system resources. For this purpose NaCl loads untrusted modules from the trusted modules into two different address spaces, where in most SFI approaches both untrusted and trusted codes are loaded into a common address space. 
+Mao et al. \cite{LXFI} study the shortcomings of XFI \cite{XFI} and \cite{BGI} kernel module isolation mechanisms that separate kernel modules from the core kernel. Integrity of API calls was one of the challenging issues in existing solutions. For example in XFI there were no argument validation. LXFI solution was proposed as an extention of existing SFI solutions with language annotation. LXFI added argument integrity in XFI and call back integrity in BGI in addition to enabling programmers for specifying principals for access permissions within a module.
 
-In another effort \cite{PSFI}, Kroll et al. discuss issues of machine-level SFI that causes portability limitations across different hardware architectures. The authors propose portable SFI through a higher level of abstraction at the compiler layer. To this end, programs are rewritten by an intermediate-level language compiler to comply with policies.
-
-
-
-
-
-
-
-
-
-
-
+In another effort \cite{PSFI}, Kroll et al. discuss the issues of machine-level SFI that causes portability limitations across different hardware architectures. The authors propose portable SFI through a higher level of abstraction at the compiler layer. To this end, programs are rewritten by an intermediate-level language compiler to comply with policies.
 
 
 
