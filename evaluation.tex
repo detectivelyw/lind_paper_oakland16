@@ -389,7 +389,15 @@ slightly larger (5.8\%) than that of Lind,
 which means that Repy's design can not allow attackers or bugs to 
 have much access to the OS kernel. In fact, only a small amount (5.8\%) of
 additional OS kernel paths might be open. 
-More importantly, The kernel trace of Repy lies completely within the safe
+Those new kernel paths added are caused by some functions in the Repy 
+sandbox kernel that has more capabilities than the system call interfaces 
+provided by Lind. 
+For examples, in Repy, 
+\texttt{sendmessage(destip, destport, message, localip, localport)} and 
+\texttt{openconnection(destip, destport, localip, localport, timeout)}
+functions could reach out to more lines of code when fuzzed.  
+
+However, the kernel trace of Repy still lies completely within the safe
 portion of the OS kernel. 
 Since the safe portion contains fewer kernel bugs, the Repy sandbox kernel
 will have a very slim chance to trigger OS kernel bugs.
