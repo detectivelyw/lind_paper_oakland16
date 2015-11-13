@@ -20,7 +20,7 @@ system.
 Thus all code, whether sandboxed or untrusted, will make calls 
 that are eventually processed by the kernel. 
 
-Unfortunately, operating system kernels are not safe and secure from
+Unfortunately, OS kernels are not safe and secure from
 attackers and the situation is worsening over time. 
 Over the past few years, the exploitation of OS kernels has been wide
 spread, 
@@ -68,35 +68,31 @@ usually by exposing a set of functions that mediate access to the
 underlying operating system privileges. 
 Threats occur when applications obtain access to privileges that were not
 intentionally granted by the system, 
-thus losing the intended protection~\cite{Repy-10}. In building a system
-that leverages our security metric, 
-we make the following assumptions about the threat we seek to address:
+thus losing the intended protection~\cite{Repy-10}. To apply the proposed security metric to a developing system, we make the following assumptions:
 
 \begin{enumerate}
-\item We assume that the operating system kernel contains one or more bugs 
-that are known to the attacker.
+\item The OS kernel contains at least one bug that is known to an adversarial attacker.
 
-\item We assume the attacker has the ability to execute code inside
+\item The attacker has the ability to execute code inside
 of a virtualized system, such as an operating system VM or library OS.
 The attacker may either have that access by writing a malicious application
 that the user executes or by exploiting a flaw that exists in a user's
 application.
 
-
-\item We assume that unintentional bugs will exist in any complex code.  This
+\item Unintentional bugs will exist in any complex code. This
 includes any security systems placed between the kernel and the user
 applications.
 
-\item We assume it is possible to provide some form of computational 
-containment.  This means that an isolated program cannot simply
-make arbitrary system calls and access the kernel directly.  This could
+\item Feasibility to provide some form of computational 
+containment. This means that an isolated program cannot simply
+make arbitrary system calls and access the kernel directly. This could
 be provided through software-fault isolation~\cite{SFI:93}, programming 
 language techniques\cappos{cites}, or by running isolated code in a
 distinct region of virtual memory\cappos{cites}.
 
-\item We assume it is possible to build functionality that possesses few
-vulnerabilities so long as it consists of little code and is conceptually 
-simple.
+\item Possibility to build functionality that possesses few
+vulnerabilities as long as it keeps the code-base to a minimum.
+
 \cappos{How do I explain
 the sandbox TCB???  How is this different from a hypervisor?}
 
