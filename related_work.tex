@@ -25,8 +25,8 @@ communication, and other sensitive functions.
 There are also sandboxing solutions based on type-safety of programming
 languages, i.e. validating through a type-checker \cite{JS-Sandboxing}
 or enforcing security policies on an untrusted system through a
-reference monitor \cite{JS-Sandboxing1}. Compared to these approaches,
-Lind dual-layer protection model ensures stronger security than just executing the code in a browser's sandbox to isolate untrusted programs.
+reference monitor \cite{JS-Sandboxing1}. %Compared to these approaches,
+%the Lind protection model ensures stronger security than just executing the code in a browser's sandbox to isolate untrusted programs.
 
 %Lind enforces strict policies and
 %rules to validate all segments of a code before executing it through a
@@ -46,15 +46,15 @@ machine is usually fatal. In contrast, Lind with a very small TCB (approximately
 \textbf{OS virtualization.}
 OS virtualization techniques can be divided into two categories:
 %Type-I or Type-II virtualization. Examples of Type-I virtualization
-bare-metal hardware virtualization such as VMware ESX Server, Xen,
+\textit{bare-metal hardware} virtualization such as VMware ESX Server, Xen,
 LXC~\cite{LXC}, BSD’s jail, Solaris zones, and Hyper-V, and 
-hosted hypervisor virtualization such as VMware
+\textit{hosted hypervisor} virtualization such as VMware
 Workstation, VMware Server, VirtualPC and the open-source counterpart
 VirtualBox.
 %
 Security by isolation \cite{Qubes}, \cite{Overshadow},
-\cite{SecureVM}, \cite{HypSec} is a feature of OS virtualization to
-provide safe executing environments through containment for multiple
+\cite{SecureVM}, \cite{HypSec} is a feature of OS virtualization that
+provides safe executing environments through containment for multiple
 user-level virtual environments that share the same hardware. This
 approach relies on the VMM to confine untrusted applications within
 guest OSs. However, there are limitations due to
@@ -99,9 +99,9 @@ in an untrusted cloud host.
 %addresses the dual challenges of
 %executing unmodified legacy binaries and protecting them from a
 %malicious host.
-Its library OS technique is similar to Lind but differs in the fact
+Its library OS technique is similar to Lind but differs in 
 that existing library OS systems rely heavily on
-the underlying kernels to perform system functions, while Lind only
+the underlying kernels to perform system functions. In contrast, Lind only
 relies on a very limited set of system functions,
 and reconstructs most OS functions with its own safe Repy code. 
 
@@ -134,7 +134,7 @@ modern techniques
 and has benefitted many security systems, including Lind. 
 
 \subsection{Software Fault Isolation}
-Software Fault Isolation (SFI) is an alternative to hardware memory
+Software fault isolation (SFI) is an alternative to hardware memory
 protection for running two applications in one address space by
 instruction rewriting. SFI provides sandboxing in which native
 instructions can only be executed if they do not violate the sandbox's
@@ -143,7 +143,7 @@ code analysis to enforce security policies. In this approach, memory
 writes are protected and code jumps cannot access predefined memory of
 other programs or executing other programs codes in memory.
 
-The preliminary design of SFI approach was build on RISC
+The preliminary design of SFI was build on RISC
 architectures. The authors of PittSFIeld \cite{PittSFIeld} optimized and
 extended the original SFI to support CISC architectures. 
 %For this purpose, the source instructions are padded with no-ops to fit, i.e.
@@ -155,9 +155,9 @@ The authors used machine-checked proof for increased assurance that
 verifier only approves safe operations.
 %
 SFI has been also used in MisFIT \cite{MISFit} to ensure kernel
-modules integrity for x86. The authors emphasized the
+module integrity for x86. The authors emphasized the
 extendability of object-oriented programming languages to eliminate
-the need for remote calls to achieve high throughput sandboxes. 
+the need for remote calls to achieve high throughput. 
 %
 Nooks \cite{Nooks:03} is another SFI-based solution that provides
 protected environment for running device drivers by isolating kernel
