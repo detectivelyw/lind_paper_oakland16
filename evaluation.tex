@@ -217,7 +217,9 @@ which is the main benefit of running applications in it.
 \caption {Linux Kernel Bugs, and Vulnerabilities in Different
 Virtualization Systems 
 ({\color{red}\ding{51}}: vulnerability triggered; \ding{55}: vulnerability
-not triggered)}
+not triggered).\cappos{It may be useful to add NaCl.  I suppose one could
+argue that NaCl is really what is providing protection or that NaCl is good
+enough.}
 \begin{tabular}{|l|c|c|c|c|c|c|}\hline
 \textbf{Vulnerability}    &  \textbf{Native Linux}  &  \textbf{VirtualBox}
 &  \textbf{VMWare Workstation}
@@ -423,6 +425,8 @@ portion of the OS kernel.
 Since the safe portion contains fewer kernel bugs, the Repy sandbox kernel
 will have a very slim chance to trigger OS kernel bugs.
 
+\cappos{I think this confuses bugs in SafePOSIX with that of the sandbox
+kernel.  I wrote the latter text in a subsection below...}
 The results explained above shows that even if our Repy sandbox kernel has a
 bug or failure inside, 
 it only slightly increases the amount of OS kernel paths open to attacks,
@@ -489,18 +493,16 @@ risk of this occurrence.
 \subsubsection{Performance Evaluation}
 \label{Performance-Evaluation}
 
-Since security systems still need to be efficient, economically and in
-terms of performance, 
-we also set up a test to demonstrate that Lind is a practical tool. 
-We ran a variety of real-world applications in Lind and compared runtime
-performance 
-against that in Native Linux to measure the overhead cost it could incur.
+While efficiency was not our main goal, we did evaluate Lind to see how
+its performance compares with other systems.  Note that we did not performance
+optimize Lind in any way.
 
 We first compiled and ran three widely used applications, 
 a primes calculator, GNU grep, and GNU wget. All ran unaltered and
 correctly inside Lind. The source code of each of the applications remains 
-unmodified. To run them, it is sufficient to just recompile the source code with 
-NaCl's GNU tool chain.
+unmodified. To run them, it is sufficient to just recompile the source code.
+This uses NaCl's compiler and uses Lind's \texttt{glibc} to call
+into SafePOSIX.
 Figure \ref{fig:performance_applications} shows the runtime performance
 results. 
 The primes application ran in Lind has a 6\% performance overhead compared to 
@@ -512,8 +514,10 @@ is that the instructions built by NaCl have a higher rate of cache misses, which
 program. 
 We expect other CPU bound processes to behave similarly. 
 Grep experienced roughly 11x slowdown over Native Linux, while the Wget
-slowdown was roughly 19x. Since they are both system-call heavy applications, they need to go 
-through our safe POSIX interface to access the kernel, which produced the overhead.  
+slowdown was roughly 19x. Since they are both I/O heavy applications, 
+each call repeatedly calls into the SafePOSIX code which then reimplements
+the call.  The additional computation of SafePOSIX, produced the additional
+overhead.  
 
 \begin{figure}
 \centering
@@ -522,14 +526,14 @@ through our safe POSIX interface to access the kernel, which produced the overhe
 \label{fig:performance_applications}
 \end{figure}
 
-Next, we ran the legacy application Tor in Lind. Tor runs unmodified in
-Lind. We used NaCl's gcc compiler to build the binary that could run in NaCl. 
+Next, we ran the Tor router software in Lind \cappos{what version}. Tor simply
+needs to be recompiled to run in Lind. 
 We used the benchmarks that come with Tor to test several of its common
 operations. 
 A summary of the results is shown in Table \ref{table:performance_tor}. The
 benchmarks focus on cryptographic operations, 
 which are CPU intensive, but also make system calls like getpid, and reads to
-/dev/urandom.
+\texttt{/dev/urandom}.
 The digest operations time the access of a map of message digests. 
 The AES operations time AES encryptions of several sizes and message 
 digest creation. 
@@ -537,7 +541,9 @@ Cell processing executes full packet encryption and decryption. In our
 test, 
 Lind slowed these operations between 2.5x and 5x. We believe these
 slowdowns 
-are caused by the increased code size produced by NaCl, and the
+are caused by the increased code size produced by NaCl, 
+\cappos{I'm not sure why this would be.  Does NaCl show this too?}
+and the
 increased overhead from Lind's safe POSIX system call interface. 
 
 As shown above,  Lind does incur some performance overhead in most cases. 
@@ -547,7 +553,9 @@ It might be argued that, since an attack on the kernel can have devastating
 result, at this initial stage, 
 a tradeoff between security and performance is justified. Despite this
 issue, 
-the fact that Lind is able to run many legacy applications suggests that it
+the fact that Lind is able to run many \cappos{4 applications isn't many...
+Do we have Apache numbers or something else to quantify?} legacy applications 
+suggests that it
 is a positive step towards building new secure systems. 
 
 \begin{table}
