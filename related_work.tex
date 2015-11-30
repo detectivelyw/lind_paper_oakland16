@@ -118,18 +118,20 @@ secure execution of applications by exposing a minimal kernel surface. This appr
 %Approaches for delegation and filtering have been extensively studied. For example, 
 %along with their respective tradeoffs between security and
 %performance.
-Janus (J2) \cite{Janus0:96, Janus:99} is a SCI solution for confining untrusted applications that includes system call filtering and sandboxing mechanisms. For this aim, the underlying OS should provide support for mediating between untrusted applications and trusted environment, in addition to allowing extra restrictions to redefine the access control policies. Garfinkel et al. in another effort describe the issues of SCI such as Janus and introduce Ostia \cite{SCI-04}, where system calls are delegated to agents that enforce the policies. Oastia resolves the tight dependencies with the underlying OS through process emulation and the agents model at the userspace.
-%
-%The kernel module enforces policy, denies direct access to restricted
+Janus (J2) \cite{Janus0:96, Janus:99} is a SCI solution for confining untrusted applications that includes system call filtering and sandboxing mechanisms. For this aim, the underlying OS should provide support for mediating between untrusted applications and trusted environment, in addition to allowing extra restrictions to redefine the access control policies. Garfinkel et al. in another effort describe the issues of SCI such as Janus and introduce Ostia \cite{SCI-04}, where system calls are delegated to agents that enforce the policies. Oastia resolves the tight dependencies with the underlying OS through process emulation and the agents model at the userspace. The issues with SCI such as the difficulty to replicate the OS semantics appropriately, multi-threaded applications that cause race conditions, or indirect paths to resources that are often overlooked. Also system calls that are denied can cause inconsistencies that are discussed in \cite{Problems-SCI}.
+
+Recently, Wang et al. \cite{Jitk} discuss the issues of the traditional SCI systems in the context of in-kernel interpreters such as Seccomp that is used by several security critical applications including Chrome, OpenSSH and Tor. The authors propose Jitk architecture to avoid the weaknesses in traditional kernelspace system call interceptors that arise from the unforeseen bugs within the interceptors. Jitk provides a formal verification tool that ensure the correct translation of the userspace submitted code, e.g. the  the BSD packet filter and INET-DIAG.        
+
+%The kernel module enforces policy, denies direct access to restricted 
 %resources, and delegates certain calls to an emulation library.
 %which sends transformed system calls to the agents.
 %The agent reads the policy file and handles the delegation of calls.
-The issues with SCI such as the difficulty to replicate the OS semantics appropriately, multi-threaded applications that cause race conditions, or indirect paths to resources that are often overlooked. Also system calls that are denied can cause inconsistencies that are discussed in \cite{Problems-SCI}.
+
 
 %Nevertheless, this technique is very useful and has inspired many new techniques, such as library OSes.
 %The concepts behind system call interposition have evolved into other modern techniques and has benefited many security systems, including Lind. 
 
-The SCI concept is very similar to Lind approach but a key difference is the actual execution of a syscall through the Lind's reimplementation to deliver safe POSIX API for the applications.
+The SCI approach is very similar to the Lind isolation mechanism but a key difference is the actual execution of a system call through the Lind's reimplementation to ensure safe POSIX API for the userspace applications.
 
 \subsection{Software Fault Isolation}
 Software fault isolation (SFI) is an alternative to hardware memory
