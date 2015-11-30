@@ -9,44 +9,43 @@ relevant to the development of our design metric and the Lind prototype and thre
 
 Running user applications relies on the operating system kernel 
 accessing critical resources, such as memory, I/O, or CPU. 
-The kernel provides an interface to serve these requests 
+The kernel provides interfaces to serve these requests 
 and provides essential functionality for all applications running in the
 system. 
 Thus all code, whether sandboxed or untrusted, will make calls 
 that are eventually processed by the kernel. 
 
-Unfortunately, OS kernels are not safe and secure from
-attackers and the situation is worsening over time. 
-Over the past few years, the exploitation of OS kernels has been wide
-spread, 
-despite substantial efforts by researchers and practitioners. 
+Unfortunately, the OS kernels are not safe and secure against adversarial attacks that is worsening over time. Over the past few years, exploitation of the OS kernels has been wide
+spread, despite substantial efforts by researchers and practitioners. 
 In 2014, 215 vulnerabilities in all types of kernels were reported~\cite{NVD}, 
-and 125 of those vulnerabilities were in the Linux kernel. 
+and 125 of those vulnerabilities were related to the Linux kernel. 
 The kernel's
 attack surface keeps increasing due to the constant addition of new
-features~\cite{Metrics-13}. 
-Indeed, the size of the Linux kernel, increased from 6.6 MLOC in v2.6.11 
-(March 2005) to 16.9 MLOC in v3.10 (June 2013)~\cite{Linux-13}. 
+features~\cite{Metrics-13}. For example, the Linux kernel grew from 6.6 MLOC in v2.6.11 (March 2005) to 16.9 MLOC in v3.10 (June 2013)~\cite{Linux-13}. 
 
 
 \cappos{Likely cut this.  I think it is excessive.}
-Such a huge kernel codebase has lead to excessive exploitation. 
-As a result, the Linux kernel has been plagued by a number of common
+Such a huge kernel codebase has lead to excessive exploitation, where it has been plagued by a number of common
 software flaws. 
 These flaws have raised serious security concerns and caused severe damage
 to systems. 
-Stack and heap buffer overflow vulnerabilities have been leveraged to 
-cause denial of service (system crash)~\cite{CVE-2013-2892}, 
-the execution of arbitrary code~\cite{CVE-2009-3234}, 
+
+The common vulnerability and exposure (CVE) database reports indicate stack and heap buffer overflow vulnerabilities have been used to launch denial of service attacks through crashing the systems (CVE-2013-2892).
+%~\cite{CVE-2013-2892}, 
+Other vulnerabilities such as the execution of arbitrary code (CVE-2009-3234) 
+%~\cite{CVE-2009-3234}, 
 or to allow local users to gain privileges via a crafted 
-application~\cite{CVE-2013-1828}. 
-Memory disclosure vulnerabilities have been exploited to allow local users
+application (CVE-2013-1828) are also among the reports.
+%~\cite{CVE-2013-1828}. 
+Memory disclosure vulnerabilities (CVE-2009-3002) have been also exploited to allow local users
 to read 
-the contents of some kernel memory locations~\cite{CVE-2009-3002}, or to
-obtain potentially 
-sensitive information from kernel stack memory~\cite{CVE-2010-4073}. 
+the contents of some kernel memory locations
+%~\cite{CVE-2009-3002}
+, or to obtain potentially sensitive information from kernel stack memory (CVE-2010-4073).
+%~\cite{CVE-2010-4073}. 
 Attackers have also used use-after-free vulnerability to gain kernel
-privileges~\cite{CVE-2013-4343}.
+privileges, i.e. CVE-2013-4343.
+%~\cite{CVE-2013-4343}.
 
 %The number of kernel vulnerabilities and their potential for exploitation, 
 %plus the fact that user applications rely on the kernel to execute
