@@ -34,10 +34,10 @@ gain privilege escalation to execute arbitrary code in the host
 OS, even shellcode to access the kernel of the host OS~\cite{CVE-2008-2100}.  
 %\cappos{Revise this paragraph further}
 
-CVE-2011-1751 was another bug due to missing check in KVM's QEMU emulation of PCI-ISA bridge. This enables an attacker to utilize other techniques \cite{Virtunoid} for root exploit in the host OS being triggered from a guest. 
+CVE-2011-1751 was another bug due to missing check in KVM's QEMU emulation of PCI-ISA bridge. This enables an attacker to utilize other techniques \cite{Virtunoid} for root exploit in the host OS being triggered from a guest.
 
 %To address this issue, 
-We propose a new design paradigm for virtualization 
+To this end, we propose a new design for virtualization 
 systems called ``safely-reimplement'' that restricts access to only the
 kernel paths that are mostly used by common applications.  To restrict the privileged
 code, we first build a minimal, sandboxed environment that also only uses 
